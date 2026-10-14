@@ -74,6 +74,11 @@ jobs:
           find sdk/bin/packages -type f -name 'luci-theme-unifi*.apk' -exec cp '{}' release/ \;
           test "$(find release -maxdepth 1 -name '*.apk' | wc -l)" -eq 1
           cp sdk/public-key.pem release/openwrt-unifi-public-key.pem
+          sdk/staging_dir/host/bin/apk \
+            --allow-untrusted \
+            adbsign \
+            --sign-key sdk/private-key.pem \
+            release/*.apk
           sdk/staging_dir/host/bin/apk mkndx \
             --root sdk \
             --keys-dir sdk \
@@ -81,6 +86,11 @@ jobs:
             --sign sdk/private-key.pem \
             --output release/packages.adb \
             release/*.apk
+          sdk/staging_dir/host/bin/apk \
+            --keys-dir sdk \
+            verify \
+            release/*.apk \
+            release/packages.adb
           (cd release && sha256sum openwrt-unifi-public-key.pem > openwrt-unifi-public-key.pem.sha256)
           (cd release && sha256sum *.apk packages.adb > SHA256SUMS)
 
