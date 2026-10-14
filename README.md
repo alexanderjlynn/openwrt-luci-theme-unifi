@@ -11,8 +11,9 @@ Ubiquiti Inc. and does not ship Ubiquiti trademarks or proprietary assets.
 
 ## Status
 
-Version 0.2.1 fixes runtime SVG rendering, replaces stock NIC artwork, and
-adds local click/hover menu expansion with persistent navigation state.
+Version 0.2.2 adds vertical page-settings navigation beneath the selected
+sidebar page, reliable category expansion, and more generous form typography
+and spacing. It includes the runtime SVG and NIC fixes from 0.2.1.
 See [the design document](docs/DESIGN.md) and
 [the interaction questionnaire](docs/INTERACTIONS.md) for the compatibility
 decisions behind the theme.
@@ -23,6 +24,8 @@ Implemented:
 - original semantic SVG icon system for primary and secondary navigation;
 - LuCI-native dynamic menus, including third-party `luci-app-*` packages;
 - reordered high-level navigation without changing LuCI routes;
+- vertical page-settings submenu with native tab switching and validation;
+- wrapping navigation labels, comfortable form spacing, and vertical mobile tabs;
 - live network-health cards using LuCI's existing system and device models;
 - physical Ethernet port tiles with carrier, role, duplex, and negotiated speed;
 - restyled stock port status including VLAN, PoE, counters, and tooltips;

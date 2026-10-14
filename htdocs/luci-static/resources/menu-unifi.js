@@ -30,7 +30,7 @@ const ICON_ALIASES = {
 	download: 'download', upload: 'upload', sun: 'sun', moon: 'moon', monitor: 'monitor'
 };
 
-const ICON_SPRITE = L.media('icons.svg') + '?v=0.2.1#unifi-';
+const ICON_SPRITE = L.media('icons.svg') + '?v=' + encodeURIComponent(L.env.resource_version || '0.2.2') + '#unifi-';
 
 // LuCI E()/dom.create() uses document.createElement(), which creates HTML,
 // not SVG. Every dynamically created SVG descendant needs this namespace.
@@ -178,7 +178,6 @@ return baseclass.extend({
 			this.addSearchEntry(_(node.title), href, '', node.name);
 
 			if (children.length) {
-				let hoverOpened = false;
 				const setExpanded = (open) => {
 					section.classList.toggle('open', open);
 					link.setAttribute('aria-expanded', String(open));
@@ -186,12 +185,9 @@ return baseclass.extend({
 					expanded[node.name] = open;
 					try { sessionStorage.setItem('luci-unifi-navigation', JSON.stringify(expanded)); } catch (e) {}
 				};
-				link.addEventListener('click', (event) => {
-					// A mouse enters immediately before a click. Do not undo the
-					// expansion caused by that same pointer movement.
-					setExpanded((hoverOpened && event.detail > 0) || !section.classList.contains('open'));
-					hoverOpened = false;
-				});
+				// The whole category always opens its options. Only the separate
+				// chevron collapses them, so hover can never reverse a click.
+				link.addEventListener('click', () => setExpanded(true));
 				link.addEventListener('keydown', (event) => {
 					if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
 						event.preventDefault();
@@ -200,7 +196,6 @@ return baseclass.extend({
 				});
 				section.addEventListener('pointerenter', (event) => {
 					if (event.pointerType === 'mouse' && window.matchMedia('(hover: hover)').matches) {
-						hoverOpened = !section.classList.contains('open');
 						setExpanded(true);
 					}
 				});
@@ -592,6 +587,7 @@ return baseclass.extend({
 						svg.parentElement.classList.add('unifi-stock-chart-frame');
 				}
 			});
+			this.syncPageTabs();
 		};
 		const schedule = () => {
 			if (scheduled) return;
@@ -600,6 +596,52 @@ return baseclass.extend({
 		};
 		apply();
 		new MutationObserver(schedule).observe(main, { childList: true, subtree: true });
+	},
+
+	syncPageTabs() {
+		const parent = document.querySelector('#mainmenu .unifi-nav-section.active .unifi-nav-children > li.selected');
+		if (!parent) return; // Unknown/custom routes keep the native vertical menus.
+		const sources = Array.from(document.querySelectorAll('#tabmenu > .tabs, #view .cbi-tabmenu'))
+			.filter(menu => !menu.closest('.modal, [role="dialog"], .cbi-section-table-row') && !menu.hidden);
+		this.pageTabObservers ??= new Map();
+		for (const [menu, observer] of this.pageTabObservers) {
+			if (!sources.includes(menu)) { observer.disconnect(); this.pageTabObservers.delete(menu); }
+		}
+		for (const menu of sources) {
+			if (this.pageTabObservers.has(menu)) continue;
+			// Never move native menus: ui.tabs uses nextElementSibling to locate
+			// panes, validation and conditional-field state. Forward clicks instead.
+			menu.classList.add('unifi-tab-source');
+			const observer = new MutationObserver(() => this.syncPageTabs());
+			observer.observe(menu, { subtree: true, childList: true, characterData: true,
+				attributes: true, attributeFilter: ['class', 'style', 'data-errors', 'hidden'] });
+			this.pageTabObservers.set(menu, observer);
+		}
+		const tabs = sources.flatMap(menu => {
+			if (menu.closest('[data-tab-active="false"]') || menu.style.display === 'none') return [];
+			return Array.from(menu.children).filter(item => item.matches('li') && item.querySelector('a'))
+				.map(item => ({ item, link: item.querySelector('a'),
+					active: item.classList.contains('active') || item.classList.contains('cbi-tab'),
+					hidden: item.hidden || item.style.display === 'none',
+					errors: item.getAttribute('data-errors') || '', label: item.querySelector('a').textContent.trim() }));
+		});
+		let rail = parent.querySelector(':scope > .unifi-page-submenu');
+		if (!tabs.length) { rail?.remove(); this.pageTabSignature = null; return; }
+		const signature = JSON.stringify(tabs.map(tab => [tab.label, tab.active, tab.hidden, tab.errors]));
+		if (rail && this.pageTabSignature === signature && tabs.every((tab, i) => rail.querySelectorAll('button')[i]?._unifiSource === tab.link)) return;
+		if (!rail) { rail = E('ul', { class: 'unifi-page-submenu', 'aria-label': _('Page settings') }); parent.appendChild(rail); }
+		const focused = document.activeElement?._unifiSource;
+		rail.replaceChildren(...tabs.map(tab => {
+			const button = E('button', { type: 'button', class: tab.active ? 'is-active' : '',
+				'aria-current': tab.active ? 'true' : null, title: tab.errors ? _('%s invalid field(s)').format(tab.errors) : tab.label }, [
+				E('span', {}, tab.label), ...(tab.errors ? [E('small', { class: 'unifi-tab-errors' }, tab.errors)] : [])
+			]);
+			button._unifiSource = tab.link;
+			button.addEventListener('click', () => { tab.link.click(); this.syncPageTabs(); });
+			return E('li', { hidden: tab.hidden ? true : null }, button);
+		}));
+		if (focused) Array.from(rail.querySelectorAll('button')).find(button => button._unifiSource === focused)?.focus({ preventScroll: true });
+		this.pageTabSignature = signature;
 	},
 
 	buildCommandMenu() {

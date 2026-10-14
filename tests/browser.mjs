@@ -18,6 +18,11 @@ const end = luci.indexOf('\n\t\tregistry:', start);
 assert(start > 0 && end > start, 'Find the upstream DOM factory');
 const factory = luci.slice(start, end).trim().replace(/,$/, '');
 const source = await fs.readFile(path.join(root, 'htdocs/luci-static/resources/menu-unifi.js'), 'utf8');
+const uiSource = await fs.readFile(path.join(upstream, 'modules/luci-base/htdocs/luci-static/resources/ui.js'), 'utf8');
+const switchStart = uiSource.indexOf('\n\t\tswitchTab(ev) {');
+const switchEnd = uiSource.indexOf('\n\t}),', switchStart);
+assert(switchStart > 0 && switchEnd > switchStart, 'Find upstream tab switching');
+const switchFactory = uiSource.slice(switchStart, switchEnd).trim();
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
@@ -68,6 +73,7 @@ try {
     document.querySelector('#mainmenu').replaceChildren();
     document.querySelector('#unifi-dashboard').replaceChildren();
     document.querySelector('#tabmenu').replaceChildren();
+    document.querySelector('#tabmenu').style.display = 'none';
     document.querySelector('#view').innerHTML = `<h2>Overview</h2><div class="cbi-map-descr">Original page description remains available.</div><div class="includes"><section class="cbi-section"><div class="cbi-title"><h3>Ethernet ports</h3></div><div><div class="ifacebox"><div class="ifacebox-head">lan1</div><div class="ifacebox-body"><img alt="LAN link" title="Port state" src="/luci-static/resources/icons/port_pse_up.svg"><br>1 Gbps, full duplex</div><div class="zonebadge">LAN VLAN 10</div><span class="cbi-tooltip">PoE 3W · RX 1234 · TX 5678</span></div></div></section></div><section class="cbi-section" id="stock-chart-section"><div style="width:100%;height:300px;border:1px solid #000;background:#fff"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><polyline id="rx" points="0,90 50,10 100,40"/></svg></div><table><tr><td>Native legend, counters, controls</td></tr></table></section>`;
     window.fixture = { rx: 100000, tx: 200000, fail: false, callbacks: [] };
     const device = (name, up, speed) => ({
@@ -86,11 +92,12 @@ try {
       status: child('status', 'Status', { overview: child('overview', 'Overview'), bandwidth: child('bandwidth', 'Realtime Graphs') }),
       network: child('network', 'Network', { network: child('network', 'Interfaces'), wireless: child('wireless', 'Wireless') }),
       services: child('services', 'Services', { custom: child('custom', 'Third-party application') }),
-      system: child('system', 'System', { package: child('package', 'Software') }),
+      system: child('system', 'System', { system: child('system', 'System'), package: child('package', 'Software') }),
       logout: child('logout', 'Logout')
     });
     const ui = { menu: { load: () => Promise.resolve({ children: { admin } }), getChildren: node => Object.values(node.children || {}) } };
     window.theme = new Function('baseclass', 'ui', 'network', 'poll', 'rpc', source)({ extend: obj => obj }, ui, network, poll, rpc);
+    fixture.menu = admin;
     theme.__init__();
   }, { factory, source });
   await page.waitForFunction(() => document.querySelector('.unifi-port-tile'));
@@ -127,6 +134,8 @@ try {
   await category.click();
   assert.equal(await category.getAttribute('aria-expanded'), 'true'); // hover must not undo the first click
   await category.click();
+  assert.equal(await category.getAttribute('aria-expanded'), 'true'); // category labels always expand
+  await page.locator('[data-menu="network"] .unifi-nav-expander').click();
   assert.equal(await category.getAttribute('aria-expanded'), 'false');
   await category.click();
   assert.equal(await category.getAttribute('aria-expanded'), 'true');
@@ -159,6 +168,58 @@ try {
     }
   }
   assert.deepEqual(errors, []);
+
+  // Exercise the actual upstream switchTab(), preserving its sibling contract,
+  // input identity, validation badges, hidden tabs, and native mobile fallback.
+  await page.evaluate(({ switchFactory }) => {
+    L.env.requestpath = L.env.dispatchpath = ['admin', 'system', 'system'];
+    document.body.classList.remove('unifi-overview-page');
+    document.querySelector('#unifi-dashboard').hidden = true;
+    document.querySelector('#mainmenu').replaceChildren();
+    theme.renderMainMenu(fixture.menu, 'admin');
+    const view = document.querySelector('#view');
+    view.innerHTML = `<h2>System settings</h2><div class="cbi-map-descr">Manage your gateway, logging and time synchronization.</div><div class="cbi-map"><ul class="cbi-tabmenu"><li data-tab="general" class="cbi-tab"><a href="#">General Settings</a></li><li data-tab="logging" class="cbi-tab-disabled"><a href="#">Logging</a></li><li data-tab="time" class="cbi-tab-disabled"><a href="#">Time Synchronization</a></li><li data-tab="hidden" style="display:none"><a href="#">Conditional Settings</a></li></ul><div id="native-panes"><section class="cbi-section" data-tab="general" data-tab-title="General Settings" data-tab-active="true"><h3>Gateway identity</h3><div class="cbi-value"><label class="cbi-value-title" for="hostname">Router hostname and a deliberately long translated configuration label</label><div class="cbi-value-field"><input id="hostname" value="gateway"><div class="cbi-value-description">This hostname identifies your gateway on the network.</div></div></div></section><section class="cbi-section" data-tab="logging" data-tab-title="Logging" data-tab-active="false"><h3>Logging</h3><div class="cbi-value"><label class="cbi-value-title" for="logserver">Remote logging server</label><div class="cbi-value-field"><input id="logserver" value="192.0.2.20"></div></div></section><section class="cbi-section" data-tab="time" data-tab-title="Time Synchronization" data-tab-active="false"><h3>Time Synchronization</h3><div class="cbi-value"><label class="cbi-value-title" for="ntp">Network time servers</label><div class="cbi-value-field"><input id="ntp" value="pool.ntp.org"><div class="cbi-value-description">Keep the gateway clock synchronized.</div></div></div></section></div></div>`;
+    const tabs = new Function('dom', 'UI', `return ({${switchFactory}})`)(
+      { matches: (node, selector) => node.nodeType === 1 && node.matches(selector) },
+      { prototype: { tabs: { setActiveTabId: (pane, index) => { fixture.lastTab = index; } } } }
+    );
+    view.querySelectorAll('.cbi-tabmenu a').forEach(link => link.addEventListener('click', event => tabs.switchTab(event)));
+    fixture.hostname = document.querySelector('#hostname');
+    fixture.hostname.value = 'unsaved-router-name';
+    theme.syncPageTabs();
+  }, { switchFactory });
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  const settingsRail = page.locator('[data-menu="system"] .unifi-page-submenu');
+  await settingsRail.getByRole('button', { name: 'Logging', exact: true }).click();
+  assert.equal(await page.locator('#native-panes > [data-tab="logging"]').getAttribute('data-tab-active'), 'true');
+  assert.equal(await page.evaluate(() => document.querySelector('#hostname') === fixture.hostname && fixture.hostname.value === 'unsaved-router-name'), true);
+  assert.equal(await page.evaluate(() => document.querySelector('.unifi-tab-source').nextElementSibling.id), 'native-panes');
+  await page.evaluate(() => {
+    document.querySelector('.unifi-tab-source > [data-tab="logging"]').setAttribute('data-errors', '2');
+  });
+  await page.waitForFunction(() => document.querySelector('.unifi-page-submenu .unifi-tab-errors')?.textContent === '2');
+  assert.equal(await settingsRail.getByRole('button', { name: 'Conditional Settings', exact: true }).isVisible(), false);
+  await settingsRail.getByRole('button', { name: 'Time Synchronization', exact: true }).click();
+  assert.equal(await page.locator('#native-panes > [data-tab="time"]').getAttribute('data-tab-active'), 'true');
+  assert.equal(await page.locator('.unifi-tab-source').isVisible(), false);
+  for (const dark of [false, true]) {
+    await page.evaluate(dark => { if (dark) document.documentElement.setAttribute('data-darkmode', 'true'); else document.documentElement.removeAttribute('data-darkmode'); }, dark);
+    for (const width of [1440, 1024, 768, 390]) {
+      await page.setViewportSize({ width, height: 1100 });
+      await page.waitForTimeout(300);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Settings do not overflow at ${width}`);
+      if (width <= 900) {
+        assert.equal(await page.locator('.unifi-tab-source').isVisible(), true);
+        await page.locator('.unifi-tab-source a').filter({ hasText: 'Time Synchronization' }).click();
+        const bounds = await page.locator('.unifi-tab-source > li').first().boundingBox();
+        assert(bounds.height >= 42, 'Native tabs have room for their text');
+      }
+      assert(await page.locator('[data-menu="system"] .unifi-nav-root').evaluate(node => node.scrollHeight <= node.clientHeight), 'Main category text is not clipped');
+      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v022-settings-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
+    }
+  }
+  assert.deepEqual(errors, []);
+  console.log('PASS: vertical settings navigation delegates to real LuCI switchTab(); unsaved inputs, native pane adjacency, hidden tabs and validation badges preserved; 1440/1024/768/390 light/dark layouts.');
   console.log('PASS: actual LuCI DOM factory, SVG icons, live graph samples, native NIC metadata, chart controls, click/hover/keyboard menus, RPC recovery, desktop/mobile light/dark.');
   console.log(JSON.stringify(graphics, null, 2));
 } finally {

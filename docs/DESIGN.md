@@ -1,6 +1,6 @@
 # LuCI Network Theme — Design Document
 
-Status: v0.2.1 runtime rendering and navigation fixes
+Status: v0.2.2 vertical settings navigation and comfortable form layout
 
 Target: OpenWrt 25.12.5 / current LuCI
 
@@ -74,8 +74,10 @@ LuCI title:
 7. Log out
 
 The current section is expanded. Other sections remain available in a single
-click, and their children can be toggled without navigation. Deep pages remain
-LuCI tabs in the content area. If multiple dispatcher modes exist, they appear
+click, and their children can be collapsed with the chevron without navigation.
+Page-level options appear as a third vertical level beneath the current page.
+On phones, native menus appear as full-width vertical lists above the form.
+If multiple dispatcher modes exist, they appear
 as an **Applications** group near the bottom of the sidebar.
 
 This is intentionally a visual reordering only. Replacing canonical LuCI menu
@@ -143,11 +145,25 @@ DOM factory to catch namespace failures that static mockups cannot expose.
 Stock NIC artwork is replaced only for recognized core device icons; adjacent
 link speed, PoE, VLAN, zone, counter, and tooltip nodes remain in place.
 
-Category buttons expand in place on click, keyboard arrows, or mouse hover.
+Category buttons always expand in place on click, keyboard arrows, or mouse hover.
+The separate chevron and keyboard left arrow collapse the category.
 Expanded state and sidebar scroll persist per browser tab. Leaf links retain
 LuCI's native full-page navigation: its view lifecycle, polling cleanup, forms,
 and third-party scripts are not compatible with a generic body-swap mechanism.
 Theme upgrades change the module cache key independently of luci-base.
+
+Page-setting links mirror native LuCI tabs beneath the selected sidebar page.
+They forward activation to the original anchor without moving or cloning the
+native form menu or its panes. LuCI's `nextElementSibling` contract, conditional
+tab visibility, validation counts, active-pane events, and unsaved input nodes
+are preserved. Native menus stay visible as vertical lists on mobile and on
+custom routes where no selected sidebar page can be identified. The runtime
+suite exercises the pinned SDK's actual `ui.tabs.switchTab()` implementation.
+
+Tab items explicitly reset Bootstrap's 25px height, 48% maximum width and
+nowrap rules. Form rows use a label/control grid with readable line heights,
+wrapping labels, and a single-column layout at narrower widths. Inactive panes
+keep LuCI's collapsed-height behavior while contributing no extra margins.
 
 Native chart styling targets the SVG and its known 300px wrapper, without
 clipping the owning section or changing graph geometry. Live port rates use

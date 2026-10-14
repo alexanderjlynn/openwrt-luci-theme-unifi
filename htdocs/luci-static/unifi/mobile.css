@@ -42,6 +42,10 @@
 		overflow-x: hidden;
 	}
 	#tabmenu { margin-bottom: 17px; }
+	.unifi-page-submenu { display: none; }
+	#view .cbi-tabmenu, #tabmenu .tabs { margin-bottom: 24px; }
+	#view .cbi-value:not(.cbi-section-table-row) { grid-template-columns: minmax(0, 1fr); gap: 7px; padding-top: 16px; padding-bottom: 16px; }
+	#view .cbi-value > .cbi-value-title { padding-top: 0; }
 	.cbi-section > h3,
 	.cbi-section > legend,
 	.cbi-section > .cbi-section-descr,

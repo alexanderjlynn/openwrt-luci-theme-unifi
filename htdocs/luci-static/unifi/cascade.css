@@ -40,7 +40,7 @@
 	--unifi-radius: 8px;
 	--unifi-radius-lg: 12px;
 	--unifi-topbar-height: 64px;
-	--unifi-sidebar-width: 264px;
+	--unifi-sidebar-width: 288px;
 	--font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	--primary-color-high: var(--unifi-blue);
 	--primary-color-medium: var(--unifi-blue-hover);
@@ -974,4 +974,52 @@ button.unifi-nav-root { appearance: none; border: 0; background: transparent; fo
 .unifi-throughput-values { gap: 14px; }
 @media (max-width: 1280px) and (min-width: 901px) {
 	.unifi-throughput-graph { width: 62%; }
+}
+
+/* Page settings form a third navigation level, below the selected page. */
+.unifi-page-submenu { margin: 3px 8px 12px 24px; padding: 4px 0 4px 12px; border-left: 1px solid var(--unifi-line); list-style: none; }
+.unifi-page-submenu > li { margin: 2px 0; padding: 0; list-style: none; }
+.unifi-page-submenu > li[hidden] { display: none !important; }
+.unifi-page-submenu button { display: flex; width: 100%; min-height: 38px; height: auto; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border: 0; border-radius: 6px; background: transparent; color: var(--unifi-text-2); font-family: inherit; font-size: 12px; font-weight: 480; line-height: 1.55; text-align: left; white-space: normal; cursor: pointer; }
+.unifi-page-submenu button > span { min-width: 0; overflow-wrap: anywhere; }
+.unifi-page-submenu button:hover { background: var(--unifi-surface-hover); color: var(--unifi-text); }
+.unifi-page-submenu button.is-active { background: var(--unifi-blue-soft); color: var(--unifi-blue); font-weight: 600; }
+.unifi-page-submenu button:focus-visible { outline: 2px solid var(--unifi-blue); outline-offset: 1px; }
+.unifi-tab-errors { display: inline-grid; min-width: 20px; min-height: 20px; flex-shrink: 0; place-items: center; padding: 1px 5px; border-radius: 10px; background: var(--unifi-red); color: white; font-size: 11px; }
+@media (min-width: 901px) {
+	.unifi-tab-source { display: none !important; }
+	#tabmenu:has(> .unifi-tab-source) { margin: 0; border: 0; }
+}
+/* Native menus are also comfortable vertical fallbacks on mobile/custom pages.
+ * Explicitly reset Bootstrap's 25px height, 48% width and nowrap constraints. */
+#view .cbi-tabmenu, #tabmenu .tabs { flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 4px; padding: 8px; border: 1px solid var(--unifi-line); border-radius: 9px; background: var(--unifi-surface); }
+#view .cbi-tabmenu > li, #tabmenu .tabs > li { display: flex; flex: none; width: 100%; max-width: none; height: auto; min-height: 42px; align-items: center; margin: 0; padding: 0; border: 0; background: transparent; }
+#view .cbi-tabmenu > li > a, #tabmenu .tabs > li > a { display: block; width: 100%; min-height: 42px; height: auto; margin: 0; padding: 11px 14px; overflow: visible; border: 0; border-radius: 6px; font-size: 13px; font-weight: 500; line-height: 1.55; white-space: normal; overflow-wrap: anywhere; text-overflow: clip; }
+#view .cbi-tabmenu > .cbi-tab > a, #tabmenu .tabs > .active > a { background: var(--unifi-blue-soft); color: var(--unifi-blue); }
+
+/* Relax the application chrome and let translated/long labels wrap. */
+.unifi-nav-root { min-height: 62px; height: auto; padding-top: 10px; padding-bottom: 10px; }
+.unifi-nav-copy { line-height: 1.4; }
+.unifi-nav-copy strong { font-size: 13.5px; line-height: 1.4; white-space: normal; overflow-wrap: anywhere; }
+.unifi-nav-copy small { margin-top: 3px; font-size: 10.5px; line-height: 1.5; white-space: normal; }
+.unifi-nav-children > li > a { min-height: 42px; padding-top: 8px; padding-bottom: 8px; font-size: 13px; line-height: 1.55; }
+.unifi-nav-children > li > a > span:last-child { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+#maincontent.container { padding-top: 32px; }
+#view h2, #view .cbi-map > h2 { margin-bottom: 12px; font-size: 26px; line-height: 1.35; letter-spacing: -.02em; }
+#view .cbi-map-descr { margin-bottom: 28px; font-size: 13px; line-height: 1.75; }
+#view .cbi-section { margin-bottom: 24px; }
+#view .cbi-section > h3, #view .cbi-section > legend { padding-top: 22px; padding-bottom: 20px; font-size: 15px; }
+#view .cbi-value:not(.cbi-section-table-row) { display: grid; grid-template-columns: minmax(180px, 240px) minmax(0, 1fr); align-items: start; gap: 12px 28px; padding-top: 18px; padding-bottom: 18px; }
+#view .cbi-value > .cbi-value-title { width: auto; min-width: 0; padding-top: 10px; font-size: 13px; font-weight: 520; line-height: 1.65; text-align: left; white-space: normal; overflow-wrap: anywhere; }
+#view .cbi-value > .cbi-value-field { min-width: 0; width: auto; margin-left: 0; padding-top: 0; font-size: 13px; line-height: 1.65; }
+#view .cbi-value > .cbi-section, #view .cbi-value > .cbi-tblsection { grid-column: 1 / -1; }
+#view .cbi-value-description { margin-top: 8px; font-size: 12px; line-height: 1.7; }
+#view .cbi-value-field > input:not([type="checkbox"]):not([type="radio"]), #view .cbi-value-field > select, #view .cbi-value-field > textarea, #view .cbi-value-field > .cbi-dropdown { max-width: 100%; min-height: 40px; }
+#view .cbi-value-field > input:not([type]):not([size]), #view .cbi-value-field > input[type="text"]:not([size]), #view .cbi-value-field > input[type="password"]:not([size]) { width: min(100%, 28rem); }
+#view [data-tab-active="false"] { min-height: 0 !important; margin: 0 !important; padding: 0 !important; border-width: 0 !important; }
+.unifi-overview-section .table .td { padding: 11px 8px; font-size: 12px; line-height: 1.6; }
+.unifi-overview-section .table .td:first-child { font-size: 11px; line-height: 1.6; letter-spacing: 0; text-transform: none; }
+@media (max-width: 1100px) {
+	#view .cbi-value:not(.cbi-section-table-row) { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+	#view .cbi-value > .cbi-value-title { padding-top: 0; }
 }
