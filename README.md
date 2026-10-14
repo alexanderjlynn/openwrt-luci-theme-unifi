@@ -11,9 +11,10 @@ Ubiquiti Inc. and does not ship Ubiquiti trademarks or proprietary assets.
 
 ## Status
 
-Version 0.2.2 adds vertical page-settings navigation beneath the selected
-sidebar page, reliable category expansion, and more generous form typography
-and spacing. It includes the runtime SVG and NIC fixes from 0.2.1.
+Version 0.3.0 replaces the imported Bootstrap styles with an original, standalone
+visual system. Buttons, forms, tables, dropdowns, dialogs, logs and firewall
+surfaces now share comfortable spacing, contemporary light/dark colors and
+restrained motion. Native LuCI widgets still own their rendering and behavior.
 See [the design document](docs/DESIGN.md) and
 [the interaction questionnaire](docs/INTERACTIONS.md) for the compatibility
 decisions behind the theme.
@@ -36,7 +37,7 @@ Implemented:
 - custom sign-in experience;
 - locally served Inter variable font (no CDN or WAN dependency);
 - reduced-motion support and keyboard-visible controls;
-- inherited upstream Bootstrap compatibility for LuCI widgets;
+- original styles for native LuCI widget states, without upstream CSS imports;
 - OpenWrt 25.12 APK build and signed repository release workflow.
 
 ## Install from the signed APK feed
@@ -125,11 +126,12 @@ make menuconfig
 make package/luci-theme-unifi/compile V=s
 ```
 
-The package is architecture-independent. Its explicit dependency on
-`luci-theme-bootstrap` is intentional: the upstream theme provides the broad
-and continuously maintained LuCI widget compatibility layer. This project
-overrides the application shell and presentation instead of maintaining a
-fragile fork of all base control styles.
+The package is architecture-independent. `luci-theme-bootstrap` remains installed
+only as a recovery theme: removing an active Network theme selects Bootstrap so
+LuCI stays reachable. Its CSS is **not loaded** by this theme. `widgets.css`
+implements native LuCI DOM states; `cascade.css` owns the console shell and
+telemetry; `mobile.css` adapts the shell for phones. No core views, form models,
+widget JavaScript, UCI actions or RPC endpoints are replaced.
 
 ## Development checks
 
@@ -145,9 +147,13 @@ LUCI_SOURCE=/path/to/sdk/feeds/luci node tests/browser.mjs
 ```
 
 It exercises dynamic icons and live graph geometry, click/hover/keyboard
-navigation, NIC metadata preservation, RPC error recovery, and desktop/mobile
-light/dark layouts. `PLAYWRIGHT_MODULE` and `BROWSER_PATH` can point to an
-existing Playwright module and Chromium executable.
+navigation, NIC metadata preservation, RPC error recovery, native tab switching,
+and the SDK's real dropdowns, multi-selects, dynamic lists, combo buttons and
+dialogs. Log/firewall fixtures check inner padding, action-button fit and
+responsive light/dark layouts, and reject upstream stylesheet requests.
+Remote service data is mocked; this is not a substitute for router testing.
+`PLAYWRIGHT_MODULE` and `BROWSER_PATH` can point to an existing Playwright module
+and Chromium executable.
 
 For meaningful visual QA, install the package on a disposable OpenWrt 25.12.5
 router or VM and exercise both core LuCI and any third-party applications you

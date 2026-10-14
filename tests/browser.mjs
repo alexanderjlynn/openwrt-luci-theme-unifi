@@ -23,13 +23,16 @@ const switchStart = uiSource.indexOf('\n\t\tswitchTab(ev) {');
 const switchEnd = uiSource.indexOf('\n\t}),', switchStart);
 assert(switchStart > 0 && switchEnd > switchStart, 'Find upstream tab switching');
 const switchFactory = uiSource.slice(switchStart, switchEnd).trim();
+const upstreamStyles = [];
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
     let filename;
     if (url.pathname === '/') filename = path.join(root, 'tests/preview.html');
-    else if (url.pathname.startsWith('/luci-static/bootstrap/'))
-      filename = path.join(upstream, 'themes/luci-theme-bootstrap/htdocs', url.pathname);
+    else if (url.pathname.startsWith('/luci-static/bootstrap/')) {
+      upstreamStyles.push(url.pathname);
+      res.writeHead(410); res.end(); return;
+    }
     else filename = path.join(root, 'htdocs', url.pathname);
     const mime = { '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.html': 'text/html' };
     const body = await fs.readFile(filename);
@@ -164,7 +167,7 @@ try {
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `No overflow at ${width}, dark=${dark}`);
       if (width === 390) assert(await page.locator('#unifi-sidebar').evaluate(node => node.getBoundingClientRect().right <= 0), 'Closed mobile drawer is fully offscreen');
       assert.equal(await page.locator('.unifi-port-panel > header').evaluate(node => getComputedStyle(node).backgroundImage), 'none', 'No inherited Bootstrap header gradient');
-      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v021-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
+      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v030-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
     }
   }
   assert.deepEqual(errors, []);
@@ -204,7 +207,7 @@ try {
   assert.equal(await page.locator('.unifi-tab-source').isVisible(), false);
   for (const dark of [false, true]) {
     await page.evaluate(dark => { if (dark) document.documentElement.setAttribute('data-darkmode', 'true'); else document.documentElement.removeAttribute('data-darkmode'); }, dark);
-    for (const width of [1440, 1024, 768, 390]) {
+    for (const width of [1440, 1024, 768, 390, 320]) {
       await page.setViewportSize({ width, height: 1100 });
       await page.waitForTimeout(300);
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Settings do not overflow at ${width}`);
@@ -215,11 +218,105 @@ try {
         assert(bounds.height >= 42, 'Native tabs have room for their text');
       }
       assert(await page.locator('[data-menu="system"] .unifi-nav-root').evaluate(node => node.scrollHeight <= node.clientHeight), 'Main category text is not clipped');
-      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v022-settings-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
+      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v030-settings-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
     }
   }
   assert.deepEqual(errors, []);
-  console.log('PASS: vertical settings navigation delegates to real LuCI switchTab(); unsaved inputs, native pane adjacency, hidden tabs and validation badges preserved; 1440/1024/768/390 light/dark layouts.');
+  // Load the SDK's real class system, DOM implementation and UI widgets, not
+  // hand-built widget lookalikes. Only remote service dependencies are stubbed.
+  await page.addScriptTag({ content: luci });
+  await page.evaluate(({ uiSource }) => {
+    const previousL = L;
+    window.L = Object.assign(Object.create(LuCI.prototype), previousL);
+    const baseclass = Object.assign(function() {}, LuCI);
+    baseclass.prototype = LuCI.prototype.__base__;
+    const dom = LuCI.prototype.dom;
+    window.E = dom.create.bind(dom);
+    const rpc = { declare: () => () => Promise.resolve({}) };
+    // Same DOM aliases supplied by LuCI's cbi.js compatibility helpers.
+    const UI = new Function('baseclass', 'validation', 'request', 'session', 'poll', 'dom', 'rpc', 'uci', 'fs', 'findParent', 'matchesElem', uiSource)(baseclass, {}, {}, {}, {}, dom, rpc, {}, {}, dom.parent.bind(dom), dom.matches.bind(dom));
+    fixture.ui = new UI();
+    document.querySelector('#view').innerHTML = `<h2>Firewall</h2><div class="cbi-map-descr">Control traffic between your networks. All policies and actions remain LuCI-native.</div><section class="cbi-section" id="firewall-card"><h3>General settings</h3><div class="cbi-section-descr">Configure gateway protection and default traffic policies.</div><div class="cbi-value"><label class="cbi-value-title">Input policy</label><div class="cbi-value-field" id="policy-field"></div></div><div class="cbi-value"><label class="cbi-value-title">Covered networks</label><div class="cbi-value-field" id="networks-field"></div></div><div class="cbi-value"><label class="cbi-value-title">Source addresses</label><div class="cbi-value-field" id="addresses-field"></div></div></section><section class="cbi-section" id="zone-card"><h3>Zones</h3><div class="table cbi-section-table"><div class="tr table-titles"><div class="th">Zone ⇒ Forwardings</div><div class="th">Input</div><div class="th">Output</div><div class="th cbi-section-actions">Actions</div></div><div class="tr"><div class="td" data-title="Zone ⇒ Forwardings"><div class="zone-forwards"><div class="zone-src"><span class="zonebadge" style="background:rgba(0,128,0,.12);--zone-color-rgb:0,128,0">lan</span></div><span>⇒</span><div class="zone-dest"><span class="zonebadge" style="background:rgba(255,0,0,.12);--zone-color-rgb:255,0,0">wan</span></div></div></div><div class="td" data-title="Input">accept</div><div class="td" data-title="Output">accept</div><div class="td cbi-section-actions"><div><button class="cbi-button cbi-button-edit">Edit</button><button class="cbi-button cbi-button-remove">Delete</button></div></div></div></div></section><div class="cbi-page-actions" id="fixture-actions"></div>`;
+    fixture.policy = new fixture.ui.Dropdown('reject', { accept: 'Accept', reject: 'Reject', drop: 'Drop' }, { id: 'policy', optional: true, select_placeholder: 'Unspecified' });
+    fixture.networks = new fixture.ui.Dropdown(['lan'], { lan: 'LAN · Trusted clients', guest: 'Guest · Isolated devices', wan: 'WAN · Internet uplink' }, { id: 'networks', multiple: true });
+    fixture.addresses = new fixture.ui.DynamicList(['192.0.2.10'], null, { id: 'addresses', placeholder: 'Add an address' });
+    document.querySelector('#policy-field').append(fixture.policy.render());
+    document.querySelector('#networks-field').append(fixture.networks.render());
+    document.querySelector('#addresses-field').append(fixture.addresses.render());
+    const save = new fixture.ui.ComboButton('0', { '0': 'Save & Apply', '1': 'Apply unchecked' }, { id: 'save-apply', classes: { '0': 'btn cbi-button cbi-button-apply important', '1': 'btn cbi-button cbi-button-negative important' } });
+    document.querySelector('#fixture-actions').append(save.render(), E('button', { class: 'cbi-button cbi-button-save' }, 'Save'), E('button', { class: 'cbi-button cbi-button-reset' }, 'Reset'));
+  }, { uiSource });
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  await page.locator('#policy').click();
+  await page.waitForFunction(() => document.querySelector('#policy[open] ul.dropdown')?.getBoundingClientRect().height > 100);
+  await page.locator('#policy ul.dropdown [data-value="accept"]').click();
+  assert.equal(await page.evaluate(() => fixture.policy.getValue()), 'accept');
+  // Optional dropdown must retain the native clearing choice.
+  await page.locator('#policy').click();
+  await page.locator('#policy ul.dropdown [placeholder]').click();
+  assert.equal(await page.evaluate(() => fixture.policy.getValue()), undefined);
+  await page.locator('#policy').focus();
+  await page.keyboard.press('ArrowDown');
+  await page.waitForFunction(() => document.activeElement?.matches('#policy ul.dropdown > li'));
+  await page.keyboard.press('Escape');
+  await page.locator('#networks').click();
+  await page.locator('#networks ul.dropdown [data-value="guest"]').click();
+  await page.locator('#networks').press('Escape');
+  assert.deepEqual(await page.evaluate(() => fixture.networks.getValue().sort()), ['guest', 'lan']);
+  await page.evaluate(() => fixture.networks.setValue([]));
+  assert.equal(await page.locator('#networks > .more').isVisible(), true);
+  assert(await page.locator('#networks > ul').evaluate(node => node.getBoundingClientRect().width < 1), 'Empty multi-select does not expose all choices in its summary');
+  await page.evaluate(() => fixture.networks.setValue(['lan', 'guest']));
+  await page.locator('#addresses .add-item input').fill('198.51.100.20');
+  await page.locator('#addresses .add-item .cbi-button-add').click();
+  assert.deepEqual(await page.evaluate(() => fixture.addresses.getValue()), ['192.0.2.10', '198.51.100.20']);
+  const firstAddress = page.locator('#addresses > .item').first();
+  await firstAddress.click({ position: { x: (await firstAddress.boundingBox()).width - 15, y: 20 } });
+  assert.deepEqual(await page.evaluate(() => fixture.addresses.getValue()), ['198.51.100.20']);
+  for (const dark of [false, true]) {
+    await page.evaluate(dark => { if (dark) document.documentElement.setAttribute('data-darkmode', 'true'); else document.documentElement.removeAttribute('data-darkmode'); }, dark);
+    for (const width of [1440, 1024, 768, 390, 320]) {
+      await page.setViewportSize({ width, height: 1100 });
+      await page.mouse.move(width - 10, 100);
+      await page.waitForTimeout(300); // settle color-mode and drawer transitions
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Firewall widgets do not overflow at ${width}`);
+      const spacing = await page.evaluate(() => {
+        const style = selector => getComputedStyle(document.querySelector(selector));
+        const buttons = [...document.querySelectorAll('#view button, #view .cbi-button')].map(node => ({ height: node.getBoundingClientRect().height, fits: node.scrollHeight <= node.clientHeight, padding: parseFloat(getComputedStyle(node).paddingLeft) }));
+        return { card: parseFloat(style('#firewall-card').paddingLeft), cell: parseFloat(style('#zone-card .td').paddingLeft), buttons };
+      });
+      assert(spacing.card >= 20 && spacing.cell >= 8, 'Card and cell text has interior gutters');
+      assert(spacing.buttons.every(button => button.height >= 40 && button.fits), 'Native action buttons have comfortable height and unclipped text');
+      assert(await page.locator('#addresses .add-item').evaluate(node => {
+        const [input, button] = [...node.children].map(child => child.getBoundingClientRect());
+        return Math.abs(input.y + input.height / 2 - button.y - button.height / 2) < 1;
+      }), 'Dynamic-list add input and action stay center-aligned on one row');
+      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v030-firewall-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
+    }
+  }
+  await page.evaluate(() => fixture.ui.showModal('Apply configuration', [E('p', {}, 'Native LuCI confirmation dialog.'), E('div', { class: 'button-row' }, E('button', { class: 'btn', click: () => fixture.ui.hideModal() }, 'Cancel'))]));
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('#modal_overlay')).opacity === '1');
+  assert(await page.locator('#modal_overlay').isVisible());
+  await page.locator('#modal_overlay').press('Escape');
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('#modal_overlay')).visibility === 'hidden');
+  await page.evaluate(() => {
+    document.querySelector('#view').innerHTML = `<h2>System Log</h2><div id="content_syslog"><div class="cbi-section-descr">Inspect gateway events. Native filtering and log data remain intact.</div><div><label>Facility</label><select><option>All facilities</option></select><label>Severity</label><select><option>All severities</option></select></div><div><label>Text filter</label><input id="logTextFilter" placeholder="Search log messages"><label>Maximum rows</label><input id="logMaxRows" value="1000"></div><div><button class="cbi-button">Scroll to bottom</button></div><textarea id="syslog" readonly wrap="off" style="font-size:12px">${Array.from({length: 24}, (_, i) => `Oct 14 12:00:${String(i).padStart(2, '0')} gateway daemon.info netifd: Interface 'lan' is now up`).join('\n')}</textarea><div><button class="cbi-button">Scroll to top</button></div></div>`;
+  });
+  for (const dark of [false, true]) {
+    await page.evaluate(dark => { if (dark) document.documentElement.setAttribute('data-darkmode', 'true'); else document.documentElement.removeAttribute('data-darkmode'); }, dark);
+    for (const width of [1440, 390, 320]) {
+      await page.setViewportSize({ width, height: 1100 });
+      await page.waitForTimeout(300);
+      const log = await page.locator('#syslog').evaluate(node => ({ padding: parseFloat(getComputedStyle(node).paddingLeft), line: parseFloat(getComputedStyle(node).lineHeight), size: parseFloat(getComputedStyle(node).fontSize), rows: node.value.split('\n').length }));
+      assert(log.padding >= 18 && log.line >= log.size * 1.8 && log.rows === 24, 'Log text retains data and generous inner spacing');
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `System log does not overflow at ${width}`);
+      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v030-log-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
+    }
+  }
+  assert.deepEqual(errors, []);
+  assert.deepEqual(upstreamStyles, [], 'No upstream stylesheet request: original theme CSS only');
+  console.log('PASS: real LuCI Dropdown, multi-select, DynamicList add/remove, ComboButton, modal open/Escape, optional clearing; padded firewall/log surfaces and action buttons; no Bootstrap requests.');
+  console.log('PASS: vertical settings navigation delegates to real LuCI switchTab(); unsaved inputs, native pane adjacency, hidden tabs and validation badges preserved; 1440/1024/768/390/320 light/dark layouts.');
   console.log('PASS: actual LuCI DOM factory, SVG icons, live graph samples, native NIC metadata, chart controls, click/hover/keyboard menus, RPC recovery, desktop/mobile light/dark.');
   console.log(JSON.stringify(graphics, null, 2));
 } finally {

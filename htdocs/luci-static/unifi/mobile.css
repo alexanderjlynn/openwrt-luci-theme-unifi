@@ -1,102 +1,51 @@
-/* SPDX-License-Identifier: Apache-2.0 */
-@import url("../bootstrap/mobile.css");
-
+/* SPDX-License-Identifier: Apache-2.0 — original responsive console layout */
 @media (max-width: 900px) {
-	:root { --unifi-topbar-height: 54px; }
-	#unifi-topbar { padding: 0 10px; }
-	#unifi-mobile-toggle { display: inline-flex; flex-direction: column; }
-	.unifi-product { flex-basis: auto; }
-	.unifi-product > span { display: none; }
-	.unifi-product img { width: 29px; height: 29px; }
-	.unifi-context { margin-left: 4px; }
-	.unifi-site-pill,
-	.unifi-context-divider { display: none; }
-	.unifi-page-context { max-width: 32vw; }
-	.unifi-search-button { width: 34px; min-width: 34px; padding: 0; border-color: transparent; background: transparent; }
-	.unifi-search-button > span:nth-child(2),
-	.unifi-search-button kbd { display: none; }
-	#indicators > * { max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-	#unifi-sidebar {
-		z-index: 1100;
-		top: var(--unifi-topbar-height);
-		width: min(292px, calc(100vw - 48px));
-		transform: translateX(-102%);
-		box-shadow: 12px 0 30px rgba(0, 0, 0, .18);
-		transition: transform .22s cubic-bezier(.2, .8, .2, 1);
-	}
-	body.unifi-nav-open { overflow: hidden; }
-	body.unifi-nav-open #unifi-sidebar { transform: translateX(0); }
-	#unifi-scrim:not([hidden]) {
-		position: fixed;
-		z-index: 1090;
-		inset: var(--unifi-topbar-height) 0 0;
-		display: block;
-		background: rgba(10, 16, 22, .45);
-		backdrop-filter: blur(2px);
-	}
-	#maincontent.container {
-		width: 100%;
-		min-width: 0;
-		margin: 0;
-		padding: 18px 14px 28px;
-		overflow-x: hidden;
-	}
-	#tabmenu { margin-bottom: 17px; }
-	.unifi-page-submenu { display: none; }
-	#view .cbi-tabmenu, #tabmenu .tabs { margin-bottom: 24px; }
-	#view .cbi-value:not(.cbi-section-table-row) { grid-template-columns: minmax(0, 1fr); gap: 7px; padding-top: 16px; padding-bottom: 16px; }
-	#view .cbi-value > .cbi-value-title { padding-top: 0; }
-	.cbi-section > h3,
-	.cbi-section > legend,
-	.cbi-section > .cbi-section-descr,
-	.cbi-section > .cbi-section-node:not(.cbi-section-table-row),
-	.cbi-section > .cbi-value,
-	.cbi-section > p { margin-right: 13px; margin-left: 13px; }
-	.cbi-section > h3,
-	.cbi-section > legend { width: calc(100% - 26px); }
-	.cbi-value { display: block; }
-	.cbi-value-title { display: block; width: auto; margin-bottom: 5px; padding: 0; text-align: left; }
-	.cbi-value > .cbi-value-title { text-align: left; }
-	.cbi-value-field { width: 100%; margin: 0; }
-	.cbi-value-field > input:not([type="checkbox"]):not([type="radio"]),
-	.cbi-value-field > select,
-	.cbi-value-field > textarea,
-	.cbi-value-field > .cbi-dropdown { width: 100%; max-width: 100%; }
-	.table,
-	table { display: block; max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
-	.unifi-command { padding-top: 8vh; }
-	.unifi-footer { flex-wrap: wrap; justify-content: flex-start; }
-	.unifi-kpi-grid,
-	#unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-	.unifi-kpi-card { min-height: 112px; }
-	.unifi-throughput-card { grid-column: 1 / -1; min-height: 132px; }
-	.unifi-port-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-	body.unifi-overview-page .includes { grid-template-columns: 1fr; }
-	body.unifi-overview-page .includes > .cbi-section,
-	body.unifi-overview-page .includes > .unifi-metric-section,
-	body.unifi-overview-page .includes > .unifi-port-status-section,
-	body.unifi-overview-page .includes > .unifi-network-status-section { grid-column: 1; }
+ :root { --unifi-topbar-height: 56px; }
+ #unifi-topbar { padding: 0 12px; }
+ #unifi-mobile-toggle { display: inline-flex; flex-direction: column; gap: 0; margin-right: 8px; }
+ .unifi-product { flex-basis: auto; }
+ .unifi-product > span, .unifi-site-pill, .unifi-context-divider { display: none; }
+ .unifi-product img { width: 30px; height: 30px; }
+ .unifi-context { margin-left: 10px; }
+ .unifi-page-context { max-width: 32vw; font-size: 13px; }
+ .unifi-top-actions { gap: 4px; }
+ .unifi-search-button { width: 36px; min-width: 36px; min-height: 36px; padding: 8px; border-color: transparent; background: transparent; }
+ .unifi-search-button > span, .unifi-search-button kbd { display: none; }
+ #indicators > * { max-width: 90px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+ #unifi-sidebar { z-index: 2000; width: min(308px, calc(100vw - 44px)); transform: translateX(-102%); transition: transform .22s cubic-bezier(.2, .8, .2, 1); box-shadow: 16px 0 48px rgba(0, 0, 0, .14); }
+ body.unifi-nav-open { overflow: hidden; }
+ body.unifi-nav-open #unifi-sidebar { transform: none; }
+ #unifi-scrim:not([hidden]) { position: fixed; z-index: 1900; inset: var(--unifi-topbar-height) 0 0; background: rgba(8, 14, 22, .4); backdrop-filter: blur(2px); }
+ #maincontent.container { width: 100%; margin: 0; padding: 24px 20px 32px; }
+ .unifi-page-submenu { display: none; }
+ .unifi-kpi-grid, #unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+ .unifi-throughput-card { grid-column: 1 / -1; }
+ body.unifi-overview-page .includes { grid-template-columns: 1fr; }
+ body.unifi-overview-page .includes > .cbi-section { grid-column: 1; }
+ #content_syslog { padding: 20px; }
+ #syslog { min-height: 360px; padding: 20px; }
+ .unifi-footer { justify-content: flex-start; }
 }
-
-@media (max-width: 520px) {
-	.unifi-context strong { max-width: 120px; }
-	#indicators { display: none; }
-	#maincontent.container { padding: 15px 10px 24px; }
-	.cbi-section { border-right: 0; border-left: 0; border-radius: 0; }
-	.unifi-login-page { padding: 14px; }
-	.unifi-login-card { padding: 24px 20px; }
-	.unifi-telemetry-heading h1 { font-size: 19px; }
-	.unifi-health-pill { display: none; }
-	.unifi-kpi-grid,
-	#unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: 1fr; }
-	.unifi-kpi-card { min-height: 100px; }
-	.unifi-throughput-card { grid-column: 1; min-height: 150px; }
-	.unifi-throughput-values { gap: 12px; }
-	.unifi-throughput-graph { right: 6px; bottom: 6px; width: 52%; height: 62px; }
-	.unifi-port-panel { padding-right: 10px; padding-left: 10px; }
-	.unifi-panel-summary { display: none; }
-	.unifi-port-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
-	.unifi-port-tile { gap: 7px; padding: 8px 6px; }
-	.unifi-port-role { display: none; }
-	.unifi-port-status-section > div:last-child > div { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+@media (max-width: 600px) {
+ #maincontent.container { padding: 24px 16px; }
+ #indicators { display: none; }
+ .unifi-kpi-grid, #unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: 1fr; }
+ .unifi-kpi-card { min-height: 140px; }
+ .unifi-throughput-card { grid-column: 1; min-height: 170px; }
+ .unifi-throughput-graph { width: 39%; }
+ .unifi-throughput-values { gap: 12px; }
+ .unifi-telemetry-heading h1 { font-size: 23px; }
+ .unifi-health-pill { display: none; }
+ .unifi-port-panel { padding: 0 16px 16px; }
+ .unifi-panel-summary { display: none; }
+ .unifi-port-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+ .unifi-port-tile { padding: 12px 8px; gap: 6px; }
+ .unifi-port-role { display: none; }
+ .unifi-port-glyph { width: 26px; flex-basis: 26px; }
+ .unifi-port-copy strong { font-size: 12px; }
+ .unifi-port-copy small { font-size: 10px; }
+ #content_syslog select { min-width: 0; max-width: 100%; }
+ #syslog { min-height: 320px; padding: 18px; }
+ .unifi-login-card { padding: 28px; }
+ .unifi-command { padding-top: 6vh; }
 }

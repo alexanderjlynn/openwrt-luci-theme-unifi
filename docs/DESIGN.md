@@ -1,6 +1,6 @@
 # LuCI Network Theme — Design Document
 
-Status: v0.2.2 vertical settings navigation and comfortable form layout
+Status: v0.3.0 original standalone CSS and native-widget regression coverage
 
 Target: OpenWrt 25.12.5 / current LuCI
 
@@ -45,20 +45,44 @@ top-level menu does not alter the dispatcher tree or page contents.
 ```text
 LuCI route + view
        │
-       ├── upstream luci-theme-bootstrap CSS (compatibility baseline)
-       │
        └── luci-theme-unifi
              ├── header.ut / footer.ut       application frame
              ├── menu-unifi.js               menu, search, preferences, live telemetry
-             ├── cascade.css / mobile.css    visual system and responsive layout
+             ├── widgets.css                 original native-widget state/presentation rules
+             ├── cascade.css                 tokens, console shell, telemetry and content surfaces
+             ├── mobile.css                  responsive console shell
              ├── sysauth.ut / sysauth.js     sign-in presentation
              └── local font + original SVGs  offline assets
 ```
 
-Depending on `luci-theme-bootstrap` is deliberate. Its CSS tracks obscure and
-new LuCI widgets. Importing it first gives every application a supported base;
-the smaller theme layer can then be maintained as a visual delta. The header
-and menu renderer follow the current ucode theme API and `ui.menu.load()`.
+No upstream theme stylesheet is imported or requested. The Bootstrap package
+dependency is retained solely as the installed recovery theme when this package
+is removed. Original CSS implements the DOM classes and state attributes of
+native LuCI widgets, not a fork of their JavaScript. This increases CSS ownership;
+maintainers must test the state contracts below when updating the target LuCI
+version. The header and menu renderer follow the current ucode theme API and
+`ui.menu.load()`.
+
+### Native widget state contracts
+
+- Dropdowns: closed summary, `[display]`, open option list, multi-selection,
+  preview clone, optional clearing and custom input. LuCI positions the list
+  inline and uses the max-height transition's end event to focus an option.
+- Dynamic lists: native item/add-input DOM, removable item hit area, drag/drop
+  states and hidden-value serialization.
+- Tabs: the menu stays adjacent to its panes. Inactive panes collapse by height,
+  not `display:none`; native validation and active-pane events remain intact.
+- Dialogs: `body.modal-overlay-active` controls the native overlay. Escape and
+  buttons remain handled by LuCI, including confirmation/rollback dialogs.
+- Tooltips: static child tooltips and LuCI's detached, inline-positioned tooltip
+  are both supported. Progress-bar title text remains visible above its track.
+- Tables: HTML tables and div-based `.table/.tr/.td` render normally; action
+  groups wrap without shrinking controls. Div tables become labeled rows on
+  narrow screens; wide HTML tables scroll without deleting columns.
+
+The Chromium suite loads actual SDK widget code for these interactions (service
+dependencies are stubbed), verifies log/firewall layout fixtures, and fails if
+any upstream theme CSS is requested. It does not certify every third-party app.
 
 ## Information architecture
 
@@ -128,10 +152,14 @@ their own data collection; the theme changes their presentation only.
 
 - Font: Inter Variable, served locally, with native UI font fallbacks.
 - Accent: `#006fff` light / `#4b9cff` dark.
-- Surfaces: white cards on `#f4f5f7`; dark surfaces use neutral blue-gray.
-- Radius: 5 px controls, 8 px panels, 12–14 px elevated dialogs.
+- Surfaces: white cards on `#f6f7f9`; dark surfaces on neutral `#101316`.
+- Radius: 6 px controls, 10 px panels, 12–14 px elevated dialogs.
 - Borders: low-contrast structure replaces heavy shadows.
-- Type: 14 px base; 10–13 px chrome; 22–24 px primary headings.
+- Type: 14 px base; 11–13.5 px navigation; 26 px page headings.
+- Spacing: 24 px card gutters (20 px mobile), 18 px form rows, 32 px label/control
+  gaps, 40 px minimum action buttons and 42 px inputs; no fixed text heights.
+- Logs: padded, scrollable monospace text with a 1.9 line height. Filtering and
+  the complete native log remain available.
 - Icons: original local SVG symbol set with 24 px view boxes and 1.7 px strokes.
 
 Tokens live at the top of `cascade.css`. Components consume tokens instead of
@@ -150,7 +178,8 @@ The separate chevron and keyboard left arrow collapse the category.
 Expanded state and sidebar scroll persist per browser tab. Leaf links retain
 LuCI's native full-page navigation: its view lifecycle, polling cleanup, forms,
 and third-party scripts are not compatible with a generic body-swap mechanism.
-Theme upgrades change the module cache key independently of luci-base.
+Theme upgrades change the module and all three stylesheet cache keys
+independently of luci-base. Stylesheets load directly, with no unversioned imports.
 
 Page-setting links mirror native LuCI tabs beneath the selected sidebar page.
 They forward activation to the original anchor without moving or cloning the
@@ -160,10 +189,12 @@ are preserved. Native menus stay visible as vertical lists on mobile and on
 custom routes where no selected sidebar page can be identified. The runtime
 suite exercises the pinned SDK's actual `ui.tabs.switchTab()` implementation.
 
-Tab items explicitly reset Bootstrap's 25px height, 48% maximum width and
-nowrap rules. Form rows use a label/control grid with readable line heights,
-wrapping labels, and a single-column layout at narrower widths. Inactive panes
-keep LuCI's collapsed-height behavior while contributing no extra margins.
+There is no Bootstrap cascade to override. Tabs and action buttons have natural
+heights and wrapping labels. Form rows use a label/control grid with readable
+line heights and a single-column layout at narrower widths. Inactive panes keep
+LuCI's collapsed-height behavior while contributing no extra margins. Padding
+belongs to the section card itself, so raw text and unknown app content get the
+same interior gutters as known core forms.
 
 Native chart styling targets the SVG and its known 300px wrapper, without
 clipping the owning section or changing graph geometry. Live port rates use
@@ -227,7 +258,8 @@ installing the replacement public key before releases switch to the new signer.
 1. Static checks pass.
 2. SDK package build succeeds.
 3. Signed repository installs without `--allow-untrusted` after key bootstrap.
-4. Compatibility matrix has no blocking regressions.
+4. Automated native-widget regression suite passes; record remaining on-router,
+   cross-browser and third-party compatibility matrix checks explicitly.
 5. Light/dark screenshots at desktop and phone widths are reviewed.
 6. A theme upgrade preserves the selected theme and browser preferences.
 7. Removing the package deletes its theme registration and, when active,
