@@ -81,13 +81,13 @@ jobs:
             release/*.apk
           sdk/staging_dir/host/bin/apk mkndx \
             --root sdk \
-            --keys-dir sdk \
+            --keys-dir "${GITHUB_WORKSPACE}/sdk" \
             --allow-untrusted \
             --sign sdk/private-key.pem \
             --output release/packages.adb \
             release/*.apk
           sdk/staging_dir/host/bin/apk \
-            --keys-dir sdk \
+            --keys-dir "${GITHUB_WORKSPACE}/sdk" \
             verify \
             release/*.apk \
             release/packages.adb
