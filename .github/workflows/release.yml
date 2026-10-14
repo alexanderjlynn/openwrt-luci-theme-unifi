@@ -16,7 +16,7 @@ jobs:
   release:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: source
 
@@ -39,7 +39,9 @@ jobs:
           curl -fL --retry 3 -o "${SDK_FILE}" "${url}"
           echo "${SDK_SHA256}  ${SDK_FILE}" | sha256sum -c -
           tar --zstd -xf "${SDK_FILE}"
-          mv openwrt-sdk-* sdk
+          sdk_dir="$(find . -maxdepth 1 -type d -name 'openwrt-sdk-*' -print -quit)"
+          test -n "${sdk_dir}"
+          mv "${sdk_dir}" sdk
 
       - name: Install pinned SDK feeds and theme source
         run: |
