@@ -1,0 +1,17 @@
+#!/bin/sh
+
+changed=0
+
+if ! uci -q get luci.themes.Unifi >/dev/null; then
+	uci set luci.themes.Unifi='/luci-static/unifi'
+	changed=1
+fi
+
+# Select the theme on first install, but never wrest control back on upgrade.
+if [ "$PKG_UPGRADE" != 1 ]; then
+	uci set luci.main.mediaurlbase='/luci-static/unifi'
+	changed=1
+fi
+
+[ "$changed" = 0 ] || uci commit luci
+exit 0

@@ -1,0 +1,93 @@
+{#
+ SPDX-License-Identifier: Apache-2.0
+ Copyright (C) 2026 Alexander J. Lynn
+-#}
+
+{%
+	import { getuid, getspnam } from 'luci.core';
+
+	const boardinfo = ubus.call('system', 'board') ?? {};
+	const pagenode = dispatched ?? node ?? {};
+	const cssnode = node ?? dispatched ?? {};
+
+	http.prepare_content('text/html; charset=UTF-8');
+-%}
+<!DOCTYPE html>
+<html lang="{{ dispatcher.lang }}" data-color-mode="auto">
+	<head>
+		<meta charset="utf-8">
+		<title>{{ striptags(`${pagenode.title ? `${_(pagenode.title)} | ` : ''}${boardinfo.hostname ?? '?'} Network`) }}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+		<meta name="theme-color" content="#f4f5f7">
+		<meta name="darkreader-lock">
+		<script>
+			(function() {
+				var mode = 'auto';
+				try { mode = localStorage.getItem('luci-unifi-color-mode') || 'auto'; } catch (e) {}
+				document.documentElement.setAttribute('data-color-mode', mode);
+				if (mode === 'dark' || (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches))
+					document.documentElement.setAttribute('data-darkmode', 'true');
+			})();
+		</script>
+		<link rel="stylesheet" href="{{ media }}/cascade.css">
+		<link rel="stylesheet" media="only screen and (max-width: 900px)" href="{{ media }}/mobile.css">
+		<link rel="icon" href="{{ media }}/mark.svg" sizes="any" type="image/svg+xml">
+		{% if (cssnode.css): %}<link rel="stylesheet" href="{{ resource }}/{{ cssnode.css }}">{% endif %}
+		{% if (css): %}<style title="text/css">{{ css }}</style>{% endif %}
+		<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
+		<script src="{{ resource }}/cbi.js"></script>
+	</head>
+
+	<body class="lang_{{ dispatcher.lang }} {{ entityencode(striptags(pagenode.title ?? ''), true) }}{{ blank_page ? ' unifi-blank' : '' }}" data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
+		<a class="unifi-skip" href="#maincontent">{{ _('Skip to content') }}</a>
+		{% if (!blank_page): %}
+		<header id="unifi-topbar">
+			<button id="unifi-mobile-toggle" class="unifi-icon-button" type="button" aria-label="{{ _('Navigation') }}" aria-controls="mainmenu" aria-expanded="false">
+				<span></span><span></span><span></span>
+			</button>
+			<a class="unifi-product" href="{{ dispatcher.build_url('admin') }}">
+				<img src="{{ media }}/mark.svg" alt="">
+				<span>Network</span>
+			</a>
+			<div class="unifi-context">
+				<span class="unifi-context-site">{{ striptags(boardinfo.hostname ?? '?') }}</span>
+				<strong>{{ pagenode.title ? _(pagenode.title) : _('Overview') }}</strong>
+			</div>
+			<div class="unifi-top-actions">
+				<button id="unifi-search-button" class="unifi-search-button" type="button" aria-haspopup="dialog">
+					<span aria-hidden="true">⌕</span><span>{{ _('Search') }}</span><kbd>/</kbd>
+				</button>
+				<div id="indicators"></div>
+				<button id="unifi-theme-toggle" class="unifi-icon-button unifi-theme-toggle" type="button" aria-label="{{ _('Toggle color mode') }}" title="{{ _('Toggle color mode') }}">◐</button>
+			</div>
+		</header>
+
+		<div id="unifi-layout">
+			<div id="unifi-scrim" hidden></div>
+			<aside id="unifi-sidebar" aria-label="{{ _('Navigation') }}">
+				<nav id="mainmenu"></nav>
+				<nav id="modemenu" style="display:none"></nav>
+				<div class="unifi-device-meta">
+					<span class="unifi-status-dot"></span>
+					<span><strong>{{ striptags(boardinfo.hostname ?? '?') }}</strong><small>{{ version.distversion }} · {{ version.distrevision }}</small></span>
+				</div>
+			</aside>
+
+			<main id="maincontent" class="container">
+				{% if (getuid() == 0 && getspnam('root')?.pwdp === ''): %}
+				<div class="alert-message warning">
+					<h4>{{ _('No password set!') }}</h4>
+					<p>{{ _('There is no password set on this router. Please configure a root password to protect the web interface.') }}</p>
+					{% if (dispatcher.lookup('admin/system/admin')): %}<div class="right"><a class="btn" href="{{ dispatcher.build_url('admin/system/admin') }}">{{ _('Go to password configuration...') }}</a></div>{% endif %}
+				</div>
+				{% endif %}
+				{% if (boardinfo.rootfs_type == 'initramfs'): %}
+				<div class="alert-message warning">
+					<h4>{{ _('System running in recovery (initramfs) mode.') }}</h4>
+					<p>{{ _('No changes to settings will be stored and are lost after rebooting. This mode should only be used to install a firmware upgrade') }}</p>
+					{% if (dispatcher.lookup('admin/system/flash')): %}<div class="right"><a class="btn" href="{{ dispatcher.build_url('admin/system/flash') }}">{{ _('Go to firmware upgrade...') }}</a></div>{% endif %}
+				</div>
+				{% endif %}
+				<noscript><div class="alert-message warning"><h4>{{ _('JavaScript required!') }}</h4><p>{{ _('You must enable JavaScript in your browser or LuCI will not work properly.') }}</p></div></noscript>
+				<div id="tabmenu" style="display:none"></div>
+		{% endif %}

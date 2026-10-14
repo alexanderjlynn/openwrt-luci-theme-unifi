@@ -1,0 +1,94 @@
+name: Build signed OpenWrt APK feed
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+env:
+  OPENWRT_VERSION: '25.12.5'
+  SDK_FILE: openwrt-sdk-25.12.5-x86-64_gcc-14.3.0_musl.Linux-x86_64.tar.zst
+  SDK_SHA256: 0c8df0151a1e88feb7c03d694d61f6a18d51872815b7c811d76e2b77504d5e9c
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: source
+
+      - name: Check source and version
+        working-directory: source
+        run: |
+          ./scripts/check.sh
+          package_version="$(sed -n 's/^PKG_VERSION:=//p' Makefile)"
+          test "v${package_version}" = "${GITHUB_REF_NAME}"
+
+      - name: Require repository signing key
+        env:
+          APK_PRIVATE_KEY: ${{ secrets.APK_PRIVATE_KEY }}
+        run: |
+          test -n "${APK_PRIVATE_KEY}"
+
+      - name: Download verified OpenWrt SDK
+        run: |
+          url="https://downloads.openwrt.org/releases/${OPENWRT_VERSION}/targets/x86/64/${SDK_FILE}"
+          curl -fL --retry 3 -o "${SDK_FILE}" "${url}"
+          echo "${SDK_SHA256}  ${SDK_FILE}" | sha256sum -c -
+          tar --zstd -xf "${SDK_FILE}"
+          mv openwrt-sdk-* sdk
+
+      - name: Install pinned SDK feeds and theme source
+        run: |
+          cd sdk
+          ./scripts/feeds update base packages luci
+          # feeds installs package and build dependencies recursively. Keeping
+          # this narrow avoids pulling every unrelated LuCI application into
+          # Kconfig while still resolving cgi-io and the core dependencies.
+          ./scripts/feeds install -p luci luci-base luci-theme-bootstrap
+          cp -a "${GITHUB_WORKSPACE}/source" package/luci-theme-unifi
+          printf '%s\n' 'CONFIG_PACKAGE_luci-theme-unifi=m' >> .config
+          printf '%s\n' 'CONFIG_SIGNED_PACKAGES=y' >> .config
+          printf '%s\n' 'CONFIG_SIGN_EACH_PACKAGE=y' >> .config
+          make defconfig
+
+      - name: Install signing key
+        env:
+          APK_PRIVATE_KEY: ${{ secrets.APK_PRIVATE_KEY }}
+        run: |
+          printf '%s\n' "${APK_PRIVATE_KEY}" > sdk/private-key.pem
+          chmod 0600 sdk/private-key.pem
+          openssl ec -in sdk/private-key.pem -pubout -out sdk/public-key.pem
+
+      - name: Build noarch APK
+        run: make -C sdk package/luci-theme-unifi/compile V=s -j2
+
+      - name: Create signed repository index
+        run: |
+          mkdir release
+          find sdk/bin/packages -type f -name 'luci-theme-unifi*.apk' -exec cp '{}' release/ \;
+          test "$(find release -maxdepth 1 -name '*.apk' | wc -l)" -eq 1
+          cp sdk/public-key.pem release/openwrt-unifi-public-key.pem
+          sdk/staging_dir/host/bin/apk mkndx \
+            --root sdk \
+            --keys-dir sdk \
+            --allow-untrusted \
+            --sign sdk/private-key.pem \
+            --output release/packages.adb \
+            release/*.apk
+          (cd release && sha256sum openwrt-unifi-public-key.pem > openwrt-unifi-public-key.pem.sha256)
+          (cd release && sha256sum *.apk packages.adb > SHA256SUMS)
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          key_digest="$(cut -d' ' -f1 release/openwrt-unifi-public-key.pem.sha256)"
+          gh release create "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "LuCI Network Theme ${GITHUB_REF_NAME}" \
+            --notes "OpenWrt ${OPENWRT_VERSION} signed APK feed. Public key SHA-256: ${key_digest}" \
+            release/*

@@ -1,0 +1,72 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+@import url("../bootstrap/mobile.css");
+
+@media (max-width: 900px) {
+	:root { --unifi-topbar-height: 54px; }
+	#unifi-topbar { padding: 0 10px; }
+	#unifi-mobile-toggle { display: inline-flex; flex-direction: column; }
+	.unifi-product { flex-basis: auto; }
+	.unifi-product span { display: none; }
+	.unifi-product img { width: 29px; height: 29px; }
+	.unifi-context { margin-left: 4px; }
+	.unifi-context-site { display: none; }
+	.unifi-search-button { width: 34px; min-width: 34px; padding: 0; border-color: transparent; background: transparent; }
+	.unifi-search-button > span:nth-child(2),
+	.unifi-search-button kbd { display: none; }
+	#indicators > * { max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+	#unifi-sidebar {
+		z-index: 1100;
+		top: var(--unifi-topbar-height);
+		width: min(292px, calc(100vw - 48px));
+		transform: translateX(-102%);
+		box-shadow: 12px 0 30px rgba(0, 0, 0, .18);
+		transition: transform .22s cubic-bezier(.2, .8, .2, 1);
+	}
+	body.unifi-nav-open { overflow: hidden; }
+	body.unifi-nav-open #unifi-sidebar { transform: translateX(0); }
+	#unifi-scrim:not([hidden]) {
+		position: fixed;
+		z-index: 1090;
+		inset: var(--unifi-topbar-height) 0 0;
+		display: block;
+		background: rgba(10, 16, 22, .45);
+		backdrop-filter: blur(2px);
+	}
+	#maincontent.container {
+		width: 100%;
+		min-width: 0;
+		margin: 0;
+		padding: 18px 14px 28px;
+		overflow-x: hidden;
+	}
+	#tabmenu { margin-bottom: 17px; }
+	.cbi-section > h3,
+	.cbi-section > legend,
+	.cbi-section > .cbi-section-descr,
+	.cbi-section > .cbi-section-node:not(.cbi-section-table-row),
+	.cbi-section > .cbi-value,
+	.cbi-section > p { margin-right: 13px; margin-left: 13px; }
+	.cbi-section > h3,
+	.cbi-section > legend { width: calc(100% - 26px); }
+	.cbi-value { display: block; }
+	.cbi-value-title { display: block; width: auto; margin-bottom: 5px; padding: 0; text-align: left; }
+	.cbi-value > .cbi-value-title { text-align: left; }
+	.cbi-value-field { width: 100%; margin: 0; }
+	.cbi-value-field > input:not([type="checkbox"]):not([type="radio"]),
+	.cbi-value-field > select,
+	.cbi-value-field > textarea,
+	.cbi-value-field > .cbi-dropdown { width: 100%; max-width: 100%; }
+	.table,
+	table { display: block; max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
+	.unifi-command { padding-top: 8vh; }
+	.unifi-footer { flex-wrap: wrap; justify-content: flex-start; }
+}
+
+@media (max-width: 520px) {
+	.unifi-context strong { max-width: 120px; }
+	#indicators { display: none; }
+	#maincontent.container { padding: 15px 10px 24px; }
+	.cbi-section { border-right: 0; border-left: 0; border-radius: 0; }
+	.unifi-login-page { padding: 14px; }
+	.unifi-login-card { padding: 24px 20px; }
+}

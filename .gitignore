@@ -1,0 +1,7 @@
+.DS_Store
+.release-keys/
+bin/
+dist/
+*.apk
+packages.adb
+private-key.pem

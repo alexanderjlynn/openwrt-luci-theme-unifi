@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-color-mode="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LuCI Network Theme Preview</title>
+  <link rel="stylesheet" href="/luci-static/unifi/cascade.css?v=3">
+  <link rel="stylesheet" media="only screen and (max-width:900px)" href="/luci-static/unifi/mobile.css?v=3">
+  <script>if (location.search.includes('dark')) document.documentElement.setAttribute('data-darkmode', 'true')</script>
+</head>
+<body data-page="admin-network-interfaces">
+  <header id="unifi-topbar">
+    <button id="unifi-mobile-toggle" class="unifi-icon-button"><span></span><span></span><span></span></button>
+    <a class="unifi-product"><img src="/luci-static/unifi/mark.svg?v=3" alt=""><span>Network</span></a>
+    <div class="unifi-context"><span class="unifi-context-site">gateway</span><strong>Interfaces</strong></div>
+    <div class="unifi-top-actions"><button class="unifi-search-button"><span>⌕</span><span>Search</span><kbd>/</kbd></button><div id="indicators"><span data-style="active">3 changes</span></div><button class="unifi-icon-button unifi-theme-toggle">◐</button></div>
+  </header>
+  <div id="unifi-layout">
+    <div id="unifi-scrim" hidden></div>
+    <aside id="unifi-sidebar">
+      <nav id="mainmenu">
+        <div class="unifi-nav-heading">Navigation</div>
+        <section class="unifi-nav-section"><div class="unifi-nav-head"><a class="unifi-nav-root"><svg class="unifi-nav-icon" viewBox="0 0 24 24"><path d="M4 13a8 8 0 1 1 16 0M5 17h14"/></svg><span>Status</span></a><button class="unifi-nav-expander">⌄</button></div></section>
+        <section class="unifi-nav-section active open"><div class="unifi-nav-head"><a class="unifi-nav-root"><svg class="unifi-nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c4 5 4 13 0 18"/></svg><span>Network</span></a><button class="unifi-nav-expander">⌄</button></div><ul class="unifi-nav-children"><li class="selected"><a><svg class="unifi-nav-child-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/></svg><span>Interfaces</span></a></li><li><a><svg class="unifi-nav-child-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg><span>Wireless</span></a></li><li><a><svg class="unifi-nav-child-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg><span>Firewall</span></a></li><li><a><svg class="unifi-nav-child-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg><span>DHCP and DNS</span></a></li></ul></section>
+        <section class="unifi-nav-section"><div class="unifi-nav-head"><a class="unifi-nav-root"><svg class="unifi-nav-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg><span>Services</span></a><button class="unifi-nav-expander">⌄</button></div></section>
+        <section class="unifi-nav-section"><div class="unifi-nav-head"><a class="unifi-nav-root"><svg class="unifi-nav-icon" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/></svg><span>System</span></a><button class="unifi-nav-expander">⌄</button></div></section>
+      </nav>
+      <div class="unifi-device-meta"><span class="unifi-status-dot"></span><span><strong>gateway</strong><small>OpenWrt 25.12.5</small></span></div>
+    </aside>
+    <main id="maincontent" class="container">
+      <div id="tabmenu"><ul class="tabs"><li class="active"><a>Interfaces</a></li><li><a>Devices</a></li><li><a>Global network options</a></li></ul></div>
+      <h2>Interfaces</h2><p class="cbi-map-descr">Configure network interfaces, addressing, and protocol behavior.</p>
+      <div class="alert-message success"><h4>Configuration is healthy</h4><p>All managed interfaces are online.</p></div>
+      <section class="cbi-section"><h3>Interfaces</h3><table class="cbi-section-table"><tr class="cbi-section-table-titles"><th>Network</th><th>Status</th><th>Protocol</th><th>Address</th><th>Actions</th></tr><tr><td><strong>LAN</strong></td><td><span style="color:var(--unifi-green)">● Up</span></td><td>Static address</td><td>192.168.1.1/24</td><td><button class="cbi-button">Edit</button></td></tr><tr><td><strong>WAN</strong></td><td><span style="color:var(--unifi-green)">● Up</span></td><td>DHCP client</td><td>203.0.113.24/24</td><td><button class="cbi-button">Edit</button></td></tr></table></section>
+      <section class="cbi-section"><h3>Interface settings</h3><div class="cbi-section-node"><div class="cbi-value"><label class="cbi-value-title">Protocol</label><div class="cbi-value-field"><select><option>Static address</option></select><div class="cbi-value-description">Protocol used for the selected interface.</div></div></div><div class="cbi-value"><label class="cbi-value-title">IPv4 address</label><div class="cbi-value-field"><input value="192.168.1.1"></div></div></div></section>
+      <div class="cbi-page-actions"><button class="cbi-button cbi-button-reset">Reset</button> <button class="cbi-button cbi-button-save">Save &amp; Apply</button></div>
+      <footer class="unifi-footer"><span>LuCI main</span><span>OpenWrt 25.12.5</span></footer>
+    </main>
+  </div>
+</body>
+</html>
