@@ -11,7 +11,7 @@ Ubiquiti Inc. and does not ship Ubiquiti trademarks or proprietary assets.
 
 ## Status
 
-Version 0.3.0 replaces the imported Bootstrap styles with an original, standalone
+Version 0.3.1 replaces the imported Bootstrap styles with an original, standalone
 visual system. Buttons, forms, tables, dropdowns, dialogs, logs and firewall
 surfaces now share comfortable spacing, contemporary light/dark colors and
 restrained motion. Native LuCI widgets still own their rendering and behavior.

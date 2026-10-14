@@ -30,12 +30,12 @@ for css in htdocs/luci-static/unifi/cascade.css htdocs/luci-static/unifi/widgets
 	[ "$open" = "$close" ] || { printf 'unbalanced braces: %s\n' "$css" >&2; exit 1; }
 done
 
-if rg -n '@import' htdocs/luci-static/unifi/*.css; then
+if grep -n '@import' htdocs/luci-static/unifi/*.css; then
 	printf 'Stylesheets must load directly with versioned URLs, not imports.\n' >&2
 	exit 1
 fi
 
-rg -q 'widgets.css\?v=\{# PKG_VERSION #\}' ucode/template/themes/unifi/header.ut
+grep -Fq 'widgets.css?v={# PKG_VERSION #}' ucode/template/themes/unifi/header.ut
 
 grep -q "luci-theme-bootstrap" Makefile
 grep -q '^LUCI_NAME:=luci-theme-unifi$' Makefile

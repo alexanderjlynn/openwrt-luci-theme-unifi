@@ -1,6 +1,6 @@
 # LuCI Network Theme — Design Document
 
-Status: v0.3.0 original standalone CSS and native-widget regression coverage
+Status: v0.3.1 original standalone CSS and native-widget regression coverage
 
 Target: OpenWrt 25.12.5 / current LuCI
 
