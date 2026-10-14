@@ -1,6 +1,6 @@
 # LuCI Network Theme — Design Document
 
-Status: v0.2 controller telemetry implementation
+Status: v0.2.1 runtime rendering and navigation fixes
 
 Target: OpenWrt 25.12.5 / current LuCI
 
@@ -134,6 +134,25 @@ their own data collection; the theme changes their presentation only.
 
 Tokens live at the top of `cascade.css`. Components consume tokens instead of
 literal colors wherever browser support permits.
+
+## Rendering and navigation safeguards
+
+Dynamic SVGs are created with `document.createElementNS()`, never LuCI's
+HTML-only `E()` helper. The runtime browser suite uses the pinned SDK's real
+DOM factory to catch namespace failures that static mockups cannot expose.
+Stock NIC artwork is replaced only for recognized core device icons; adjacent
+link speed, PoE, VLAN, zone, counter, and tooltip nodes remain in place.
+
+Category buttons expand in place on click, keyboard arrows, or mouse hover.
+Expanded state and sidebar scroll persist per browser tab. Leaf links retain
+LuCI's native full-page navigation: its view lifecycle, polling cleanup, forms,
+and third-party scripts are not compatible with a generic body-swap mechanism.
+Theme upgrades change the module cache key independently of luci-base.
+
+Native chart styling targets the SVG and its known 300px wrapper, without
+clipping the owning section or changing graph geometry. Live port rates use
+device counter deltas; they are aggregate RX/TX, not an Internet speed test.
+RPC failures show unavailable state and retry on the next shared poll.
 
 ## Accessibility
 

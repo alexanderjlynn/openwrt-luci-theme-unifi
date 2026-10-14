@@ -11,7 +11,8 @@ Ubiquiti Inc. and does not ship Ubiquiti trademarks or proprietary assets.
 
 ## Status
 
-Version 0.2 adds the controller-style telemetry and port presentation pass.
+Version 0.2.1 fixes runtime SVG rendering, replaces stock NIC artwork, and
+adds local click/hover menu expansion with persistent navigation state.
 See [the design document](docs/DESIGN.md) and
 [the interaction questionnaire](docs/INTERACTIONS.md) for the compatibility
 decisions behind the theme.
@@ -87,7 +88,8 @@ work. In LuCI:
 1. Open **System → Software**.
 2. Select **Update lists**.
 3. Filter for `luci-theme-unifi`.
-4. Use **Upgrade** when a newer version is available.
+4. Select the **Updates** tab, then use **Upgrade…**. The **Installed** tab
+   always offers **Remove…**, even if an update exists.
 
 From SSH, upgrade only this package:
 
@@ -98,6 +100,10 @@ apk upgrade luci-theme-unifi
 
 If **System → Software** is not present on a minimal LuCI image, install its
 official front end once with `apk add luci-app-package-manager`.
+
+After upgrading, reload the LuCI page once to load the new theme shell. Theme
+releases include their version in the JavaScript cache key. If an earlier
+release is still visible, use a hard refresh once.
 
 Do not use an unqualified `apk upgrade` on OpenWrt. Firmware packages are built
 as a coherent set; use sysupgrade/Attended Sysupgrade for the operating system.
@@ -127,6 +133,18 @@ fragile fork of all base control styles.
 ```sh
 ./scripts/check.sh
 ```
+
+The release workflow also runs a Chromium regression suite against the exact
+SDK LuCI DOM factory. To run it locally with Playwright installed:
+
+```sh
+LUCI_SOURCE=/path/to/sdk/feeds/luci node tests/browser.mjs
+```
+
+It exercises dynamic icons and live graph geometry, click/hover/keyboard
+navigation, NIC metadata preservation, RPC error recovery, and desktop/mobile
+light/dark layouts. `PLAYWRIGHT_MODULE` and `BROWSER_PATH` can point to an
+existing Playwright module and Chromium executable.
 
 For meaningful visual QA, install the package on a disposable OpenWrt 25.12.5
 router or VM and exercise both core LuCI and any third-party applications you

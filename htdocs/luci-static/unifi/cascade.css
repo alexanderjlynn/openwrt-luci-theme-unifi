@@ -146,9 +146,11 @@ a:hover { color: var(--unifi-blue-hover); }
 	align-items: center;
 	height: var(--unifi-topbar-height);
 	min-height: 0;
+	margin: 0;
 	padding: 0 16px;
 	border-bottom: 1px solid var(--unifi-line);
 	background: color-mix(in srgb, var(--unifi-surface) 94%, transparent);
+	color: var(--unifi-text);
 	box-shadow: none;
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
@@ -851,7 +853,7 @@ body.unifi-blank > #view { display: none; }
 .unifi-throughput-line.is-tx { stroke: var(--unifi-cyan); opacity: .8; }
 
 .unifi-port-panel { margin-top: 12px; padding: 0 15px 15px; border: 1px solid var(--unifi-line); border-radius: 10px; background: var(--unifi-surface); box-shadow: var(--unifi-shadow-sm); }
-.unifi-port-panel > header { display: flex; min-height: 54px; align-items: center; gap: 10px; border-bottom: 1px solid var(--unifi-line); }
+.unifi-port-panel > header { position: static; z-index: auto; display: flex; width: auto; min-height: 54px; align-items: center; gap: 10px; margin: 0; padding: 0; border: 0; border-bottom: 1px solid var(--unifi-line); background: transparent; box-shadow: none; color: var(--unifi-text); text-shadow: none; }
 .unifi-panel-icon { display: grid; width: 30px; height: 30px; flex: 0 0 30px; place-items: center; border-radius: 8px; background: var(--unifi-blue-soft); color: var(--unifi-blue); }
 .unifi-panel-svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .unifi-port-panel > header > span:nth-child(2) { display: flex; flex-direction: column; line-height: 1.1; }
@@ -878,8 +880,7 @@ body.unifi-blank > #view { display: none; }
 #unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: repeat(3, minmax(140px, .65fr)) minmax(320px, 1.6fr); }
 
 /* Turn the stock status overview into a controller-style responsive card grid. */
-body.unifi-overview-page #view > h2:first-child,
-body.unifi-overview-page #view > .cbi-map-descr:first-of-type { display: none; }
+body.unifi-overview-page #view > h2:first-child { display: none; }
 body.unifi-overview-page .includes { display: grid !important; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px; }
 body.unifi-overview-page .includes > .cbi-section { display: block; grid-column: span 6; margin: 0; min-width: 0; }
 body.unifi-overview-page .includes > .unifi-port-status-section,
@@ -891,7 +892,7 @@ body.unifi-overview-page .includes > .unifi-metric-section { grid-column: span 4
 .unifi-overview-section .table { border: 0; border-radius: 0; box-shadow: none; }
 .unifi-overview-section .table .td { padding: 8px 5px; border-top-color: var(--unifi-line); font-size: 10.5px; }
 .unifi-overview-section .table .td:first-child { color: var(--unifi-text-3); font-size: 9px; font-weight: 570; letter-spacing: .025em; text-transform: uppercase; }
-.cbi-progressbar { height: 7px; overflow: hidden; border: 0; border-radius: 99px; background: var(--unifi-line); box-shadow: none; }
+.cbi-progressbar { min-height: 20px; height: auto; border: 0; border-radius: 6px; background: var(--unifi-line); box-shadow: none; font-size: 11px; line-height: 20px; }
 .cbi-progressbar > div { border: 0; border-radius: inherit; background: linear-gradient(90deg, var(--unifi-blue), var(--unifi-cyan)); box-shadow: none; }
 
 /* Stock 25.12 port include: retain its PoE, VLAN, counters and tooltips, restyle only. */
@@ -910,12 +911,11 @@ body.unifi-overview-page .includes > .unifi-metric-section { grid-column: span 4
 
 /* Realtime LuCI charts, with the native three-second polling untouched. */
 .unifi-realtime-page .cbi-map > .cbi-section { padding: 14px; }
-.unifi-stock-chart { width: 100% !important; height: 280px !important; overflow: hidden; border: 1px solid var(--unifi-line) !important; border-radius: 9px; background: linear-gradient(180deg, color-mix(in srgb, var(--unifi-blue) 4%, var(--unifi-surface)), var(--unifi-surface)) !important; }
-.unifi-stock-chart > svg { display: block; width: 100%; height: 100%; }
-.unifi-stock-chart svg #rx { fill: var(--unifi-blue) !important; fill-opacity: .13 !important; stroke: var(--unifi-blue) !important; stroke-width: 1.6 !important; }
-.unifi-stock-chart svg #tx { fill: var(--unifi-cyan) !important; fill-opacity: .10 !important; stroke: var(--unifi-cyan) !important; stroke-width: 1.6 !important; }
-.unifi-stock-chart svg line { stroke: var(--unifi-line-strong) !important; stroke-width: .6 !important; stroke-dasharray: 3 4; }
-.unifi-stock-chart svg text { fill: var(--unifi-text-3) !important; font-family: var(--font-sans) !important; font-size: 9px !important; text-shadow: none !important; }
+svg.unifi-stock-chart { display: block; width: 100%; border-radius: 8px; background: linear-gradient(180deg, color-mix(in srgb, var(--unifi-blue) 4%, var(--unifi-surface)), var(--unifi-surface)); }
+.unifi-stock-chart #rx { fill: var(--unifi-blue) !important; fill-opacity: .13 !important; stroke: var(--unifi-blue) !important; stroke-width: 1.6 !important; }
+.unifi-stock-chart #tx { fill: var(--unifi-cyan) !important; fill-opacity: .10 !important; stroke: var(--unifi-cyan) !important; stroke-width: 1.6 !important; }
+.unifi-stock-chart line { stroke: var(--unifi-line-strong) !important; stroke-width: .6 !important; stroke-dasharray: 3 4; }
+.unifi-stock-chart text { fill: var(--unifi-text-3) !important; font-family: var(--font-sans) !important; font-size: 9px !important; text-shadow: none !important; }
 .unifi-realtime-page .cbi-section > .table { margin-top: 10px; }
 .unifi-realtime-page .cbi-section > .table .td { background: transparent; }
 
@@ -939,4 +939,39 @@ body.unifi-overview-page .includes > .unifi-metric-section { grid-column: span 4
 	#unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: repeat(3, minmax(140px, 1fr)); }
 	.unifi-throughput-card { grid-column: 1 / -1; }
 	body.unifi-overview-page .includes > .unifi-metric-section { grid-column: span 6; }
+}
+
+/* View-level typography: LuCI renders page headings inside #view, not main. */
+#view { min-width: 0; color: var(--unifi-text); font-family: var(--font-sans); }
+#view h2, #view .cbi-map > h2 { margin: 0 0 8px; padding: 0; border: 0; font-family: inherit; font-size: 23px; line-height: 1.3; font-weight: 620; letter-spacing: -.035em; }
+#view h3, #view legend { font-family: inherit; font-size: 14px; line-height: 1.4; font-weight: 600; letter-spacing: -.015em; }
+#view .cbi-map-descr { max-width: 86ch; margin: 0 0 24px; color: var(--unifi-text-3); font-size: 12px; line-height: 1.7; }
+#view .cbi-section-descr { color: var(--unifi-text-3); font-size: 12px; line-height: 1.65; }
+#view .cbi-section { margin-bottom: 16px; border-radius: 10px; box-shadow: none; }
+#view .cbi-section > h3, #view .cbi-section > legend { padding-top: 18px; padding-bottom: 16px; }
+#view .cbi-value { padding-top: 12px; padding-bottom: 12px; }
+#view .cbi-value + .cbi-value { border-top: 1px solid color-mix(in srgb, var(--unifi-line) 65%, transparent); }
+#view .cbi-value-title { color: var(--unifi-text-2); font-size: 12px; font-weight: 550; line-height: 1.5; }
+#view .cbi-value-description { max-width: 76ch; padding-top: 3px; font-size: 11px; line-height: 1.65; }
+#view .cbi-tabmenu { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 20px; padding: 0; border: 0; border-bottom: 1px solid var(--unifi-line); background: transparent; }
+#view .cbi-tabmenu > li { margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; }
+#view .cbi-tabmenu > li > a { display: block; padding: 11px 14px; border-bottom: 2px solid transparent; color: var(--unifi-text-3); font-size: 12px; font-weight: 550; text-decoration: none; }
+#view .cbi-tabmenu > .cbi-tab > a { border-bottom-color: var(--unifi-blue); color: var(--unifi-blue); }
+#view .cbi-tabmenu > li > a:hover { color: var(--unifi-text); background: var(--unifi-surface-hover); }
+button.unifi-nav-root { appearance: none; border: 0; background: transparent; font-family: inherit; text-align: left; cursor: pointer; box-shadow: none; }
+.unifi-nav-children { visibility: hidden; }
+.unifi-nav-section.open .unifi-nav-children { visibility: visible; max-height: none; }
+.unifi-nav-root:focus-visible { outline: 2px solid var(--unifi-blue); outline-offset: 1px; }
+.unifi-device-icon-svg { display: inline-block; width: 22px; height: 22px; flex: 0 0 22px; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; color: var(--unifi-blue); }
+.unifi-device-icon-svg.is-offline { color: var(--unifi-text-3); opacity: .6; }
+.unifi-device-icon-svg.is-poe { color: var(--unifi-amber); }
+.unifi-luci-port .ifacebox-body > .unifi-device-icon-svg { width: 38px; height: 38px; margin: 5px 0 8px; padding: 6px; border: 1px solid var(--unifi-line); border-radius: 8px; background: var(--unifi-surface); color: var(--unifi-green); }
+.unifi-luci-port .ifacebox-body > .unifi-device-icon-svg.is-offline { color: var(--unifi-text-3); }
+.unifi-luci-port .ifacebox-body > .unifi-device-icon-svg.is-poe { color: var(--unifi-amber); }
+.unifi-stock-chart-frame { border: 1px solid var(--unifi-line) !important; border-radius: 9px; background: var(--unifi-surface) !important; }
+.unifi-throughput-caption { position: absolute; left: 15px; bottom: 8px; color: var(--unifi-text-3); font-size: 8px; line-height: 1.3; }
+.unifi-throughput-graph { width: 50%; height: 62px; }
+.unifi-throughput-values { gap: 14px; }
+@media (max-width: 1280px) and (min-width: 901px) {
+	.unifi-throughput-graph { width: 62%; }
 }

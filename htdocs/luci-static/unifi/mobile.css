@@ -72,7 +72,6 @@
 	body.unifi-overview-page .includes > .unifi-metric-section,
 	body.unifi-overview-page .includes > .unifi-port-status-section,
 	body.unifi-overview-page .includes > .unifi-network-status-section { grid-column: 1; }
-	.unifi-stock-chart { height: 230px !important; }
 }
 
 @media (max-width: 520px) {

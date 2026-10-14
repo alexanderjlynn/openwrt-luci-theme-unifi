@@ -15,7 +15,7 @@ LUCI_URL:=https://github.com/alexanderjlynn/openwrt-luci-theme-unifi
 LUCI_MINIFY_CSS:=0
 
 PKG_LICENSE:=Apache-2.0
-PKG_VERSION:=0.2.0
+PKG_VERSION:=0.2.1
 PKG_RELEASE:=1
 
 define Package/luci-theme-unifi/postrm

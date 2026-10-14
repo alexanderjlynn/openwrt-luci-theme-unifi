@@ -57,6 +57,18 @@ jobs:
           printf '%s\n' 'CONFIG_SIGN_EACH_PACKAGE=y' >> .config
           make defconfig
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify runtime rendering in Chromium
+        run: |
+          npm install --prefix "${RUNNER_TEMP}/theme-browser-tests" --no-save playwright@1.62.1
+          node "${RUNNER_TEMP}/theme-browser-tests/node_modules/playwright/cli.js" install --with-deps chromium
+          LUCI_SOURCE="${GITHUB_WORKSPACE}/sdk/feeds/luci" \
+          PLAYWRIGHT_MODULE="${RUNNER_TEMP}/theme-browser-tests/node_modules/playwright" \
+            node source/tests/browser.mjs
+
       - name: Install signing key
         env:
           APK_PRIVATE_KEY: ${{ secrets.APK_PRIVATE_KEY }}

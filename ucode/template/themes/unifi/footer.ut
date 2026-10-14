@@ -13,7 +13,12 @@
 				<p>{{ _('Type to filter · Enter to open') }}</p>
 			</div>
 		</div>
-		<script>L.require('menu-unifi')</script>
+		<script>
+			// LuCI normally keys module caching to luci-base. Include the theme
+			// version so an APK theme upgrade also refreshes its menu module.
+			L.env.resource_version = (L.env.resource_version || '') + '-unifi-{# PKG_VERSION #}';
+			L.require('menu-unifi');
+		</script>
 		{% endif %}
 	</body>
 </html>
