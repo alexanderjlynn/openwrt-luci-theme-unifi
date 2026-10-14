@@ -11,15 +11,22 @@ Ubiquiti Inc. and does not ship Ubiquiti trademarks or proprietary assets.
 
 ## Status
 
-The repository currently contains the first functional implementation. See
-[the design document](docs/DESIGN.md) and [the interaction questionnaire](docs/INTERACTIONS.md)
-for the decisions that will shape the next pass.
+Version 0.2 adds the controller-style telemetry and port presentation pass.
+See [the design document](docs/DESIGN.md) and
+[the interaction questionnaire](docs/INTERACTIONS.md) for the compatibility
+decisions behind the theme.
 
 Implemented:
 
 - controller-style fixed top bar and application sidebar;
+- original semantic SVG icon system for primary and secondary navigation;
 - LuCI-native dynamic menus, including third-party `luci-app-*` packages;
 - reordered high-level navigation without changing LuCI routes;
+- live network-health cards using LuCI's existing system and device models;
+- physical Ethernet port tiles with carrier, role, duplex, and negotiated speed;
+- restyled stock port status including VLAN, PoE, counters, and tooltips;
+- controller-style realtime throughput charts while retaining native polling;
+- responsive status-overview card grid and semantic health colors;
 - keyboard navigation search (`/`), light/dark/automatic color modes;
 - responsive drawer navigation and touch-friendly controls;
 - custom sign-in experience;
@@ -30,8 +37,8 @@ Implemented:
 
 ## Install from the signed APK feed
 
-The following commands are the intended production installation path once the
-first GitHub release has been published. The pinned key digest must match the
+The following commands are the production installation path. The pinned key
+digest must match the
 `openwrt-unifi-public-key.pem.sha256` value attached to that release. Do not
 copy a digest from an untrusted mirror.
 

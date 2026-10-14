@@ -8,7 +8,7 @@
 		</div>
 		<div id="unifi-command" class="unifi-command" role="dialog" aria-modal="true" aria-label="{{ _('Search navigation') }}" hidden>
 			<div class="unifi-command-panel">
-				<label><span aria-hidden="true">⌕</span><input id="unifi-command-input" type="search" autocomplete="off" placeholder="{{ _('Search settings and pages…') }}"><kbd>Esc</kbd></label>
+				<label><svg viewBox="0 0 24 24" aria-hidden="true"><use href="{{ media }}/icons.svg#unifi-search"></use></svg><input id="unifi-command-input" type="search" autocomplete="off" placeholder="{{ _('Search settings and pages…') }}"><kbd>Esc</kbd></label>
 				<ul id="unifi-command-results"></ul>
 				<p>{{ _('Type to filter · Enter to open') }}</p>
 			</div>

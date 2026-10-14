@@ -4,6 +4,10 @@ These are the product decisions that most affect the next implementation pass.
 Recommended defaults are marked. Short answers are fine; for example:
 `1B, 2A, 3C, 4A`.
 
+The v0.2 implementation follows **1B, 2A with a progressive live telemetry
+deck, 3C, 4A, 5A, 6C, 7A, 8C, 9A, and 10A**. These choices preserve LuCI as the
+application while moving its presentation closer to a current network console.
+
 ## 1. Navigation density
 
 - **A — Compact controller (recommended):** 240 px sidebar, 34–38 px rows,

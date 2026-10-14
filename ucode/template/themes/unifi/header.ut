@@ -47,18 +47,27 @@
 			</button>
 			<a class="unifi-product" href="{{ dispatcher.build_url('admin') }}">
 				<img src="{{ media }}/mark.svg" alt="">
-				<span>Network</span>
+				<span><strong>Network</strong><small>OpenWrt Console</small></span>
 			</a>
 			<div class="unifi-context">
-				<span class="unifi-context-site">{{ striptags(boardinfo.hostname ?? '?') }}</span>
-				<strong>{{ pagenode.title ? _(pagenode.title) : _('Overview') }}</strong>
+				<span class="unifi-site-pill">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><use href="{{ media }}/icons.svg#unifi-gateway"></use></svg>
+					<span><small>{{ _('Console') }}</small><strong>{{ striptags(boardinfo.hostname ?? '?') }}</strong></span>
+				</span>
+				<span class="unifi-context-divider"></span>
+				<strong class="unifi-page-context">{{ pagenode.title ? _(pagenode.title) : _('Overview') }}</strong>
 			</div>
 			<div class="unifi-top-actions">
 				<button id="unifi-search-button" class="unifi-search-button" type="button" aria-haspopup="dialog">
-					<span aria-hidden="true">⌕</span><span>{{ _('Search') }}</span><kbd>/</kbd>
+					<svg viewBox="0 0 24 24" aria-hidden="true"><use href="{{ media }}/icons.svg#unifi-search"></use></svg><span>{{ _('Search settings') }}</span><kbd>/</kbd>
 				</button>
 				<div id="indicators"></div>
-				<button id="unifi-theme-toggle" class="unifi-icon-button unifi-theme-toggle" type="button" aria-label="{{ _('Toggle color mode') }}" title="{{ _('Toggle color mode') }}">◐</button>
+				<a class="unifi-icon-button unifi-health-link" href="{{ dispatcher.build_url('admin/status/overview') }}" aria-label="{{ _('Network health') }}" title="{{ _('Network health') }}">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><use href="{{ media }}/icons.svg#unifi-activity"></use></svg><i></i>
+				</a>
+				<button id="unifi-theme-toggle" class="unifi-icon-button unifi-theme-toggle" type="button" aria-label="{{ _('Toggle color mode') }}" title="{{ _('Toggle color mode') }}">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><use href="{{ media }}/icons.svg#unifi-monitor"></use></svg>
+				</button>
 			</div>
 		</header>
 
@@ -68,8 +77,8 @@
 				<nav id="mainmenu"></nav>
 				<nav id="modemenu" style="display:none"></nav>
 				<div class="unifi-device-meta">
-					<span class="unifi-status-dot"></span>
-					<span><strong>{{ striptags(boardinfo.hostname ?? '?') }}</strong><small>{{ version.distversion }} · {{ version.distrevision }}</small></span>
+					<span class="unifi-device-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="{{ media }}/icons.svg#unifi-gateway"></use></svg><i></i></span>
+					<span><strong>{{ striptags(boardinfo.hostname ?? '?') }}</strong><small>{{ _('Gateway online') }} · {{ version.distversion }}</small></span>
 				</div>
 			</aside>
 
@@ -89,5 +98,6 @@
 				</div>
 				{% endif %}
 				<noscript><div class="alert-message warning"><h4>{{ _('JavaScript required!') }}</h4><p>{{ _('You must enable JavaScript in your browser or LuCI will not work properly.') }}</p></div></noscript>
+				<div id="unifi-dashboard" hidden></div>
 				<div id="tabmenu" style="display:none"></div>
 		{% endif %}

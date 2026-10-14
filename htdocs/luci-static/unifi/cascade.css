@@ -19,6 +19,8 @@
 	--unifi-blue: #006fff;
 	--unifi-blue-hover: #005ee0;
 	--unifi-blue-soft: #eaf3ff;
+	--unifi-cyan: #00a6d7;
+	--unifi-violet: #7857e6;
 	--unifi-green: #18a558;
 	--unifi-amber: #d97706;
 	--unifi-red: #e5484d;
@@ -37,8 +39,8 @@
 	--unifi-radius-sm: 5px;
 	--unifi-radius: 8px;
 	--unifi-radius-lg: 12px;
-	--unifi-topbar-height: 56px;
-	--unifi-sidebar-width: 240px;
+	--unifi-topbar-height: 64px;
+	--unifi-sidebar-width: 264px;
 	--font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	--primary-color-high: var(--unifi-blue);
 	--primary-color-medium: var(--unifi-blue-hover);
@@ -59,6 +61,8 @@
 	--unifi-blue: #4b9cff;
 	--unifi-blue-hover: #72b1ff;
 	--unifi-blue-soft: rgba(52, 137, 255, .17);
+	--unifi-cyan: #36c6ed;
+	--unifi-violet: #a38bff;
 	--unifi-green: #42c77a;
 	--unifi-amber: #f0ad4e;
 	--unifi-red: #ff6b70;
@@ -282,6 +286,7 @@ kbd {
 .unifi-nav-root,
 .unifi-nav-children a,
 #modemenu a {
+	position: relative;
 	display: flex;
 	min-width: 0;
 	align-items: center;
@@ -741,4 +746,197 @@ body.unifi-blank > #view { display: none; }
 @supports not (color: color-mix(in srgb, white, black)) {
 	#unifi-topbar, .unifi-login-card { background: var(--unifi-surface); }
 	.unifi-nav-section.active > .unifi-nav-head .unifi-nav-root { background: var(--unifi-blue-soft); }
+}
+
+/* Network-console shell */
+#unifi-topbar { padding: 0 18px; }
+.unifi-product { flex-basis: calc(var(--unifi-sidebar-width) - 18px); gap: 11px; }
+.unifi-product img { width: 34px; height: 34px; }
+.unifi-product > span { display: flex; flex-direction: column; line-height: 1.05; }
+.unifi-product strong { color: var(--unifi-text); font-size: 14px; font-weight: 680; letter-spacing: -.02em; }
+.unifi-product small { margin-top: 4px; color: var(--unifi-text-3); font-size: 8px; font-weight: 620; letter-spacing: .075em; text-transform: uppercase; }
+.unifi-context { align-items: center; gap: 12px; }
+.unifi-site-pill { display: flex; min-width: 0; align-items: center; gap: 8px; }
+.unifi-site-pill > svg { width: 20px; height: 20px; flex: 0 0 20px; fill: none; stroke: var(--unifi-text-3); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.unifi-site-pill > span { display: flex; min-width: 0; flex-direction: column; line-height: 1.05; }
+.unifi-site-pill small { color: var(--unifi-text-3); font-size: 8px; font-weight: 620; letter-spacing: .06em; text-transform: uppercase; }
+.unifi-site-pill strong { max-width: 180px; margin-top: 3px; overflow: hidden; color: var(--unifi-text-2); font-size: 11px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.unifi-context-divider { width: 1px; height: 24px; background: var(--unifi-line); }
+.unifi-page-context { max-width: min(30vw, 420px); overflow: hidden; font-size: 14px; font-weight: 630; text-overflow: ellipsis; white-space: nowrap; }
+.unifi-search-button > svg,
+.unifi-health-link > svg,
+.unifi-theme-toggle > svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.unifi-search-button { width: min(230px, 22vw); min-width: 178px; background: color-mix(in srgb, var(--unifi-bg) 76%, var(--unifi-surface)); }
+.unifi-health-link { position: relative; text-decoration: none; }
+.unifi-health-link:hover { text-decoration: none; }
+.unifi-health-link i { position: absolute; top: 7px; right: 6px; width: 6px; height: 6px; border: 1.5px solid var(--unifi-surface); border-radius: 50%; background: var(--unifi-green); }
+.unifi-theme-toggle[data-mode="dark"] { color: var(--unifi-blue); }
+.unifi-theme-toggle[data-mode="light"] { color: var(--unifi-amber); }
+
+#unifi-sidebar { padding: 16px 10px 12px; background: color-mix(in srgb, var(--unifi-sidebar) 97%, var(--unifi-bg)); }
+.unifi-nav-heading { display: flex; align-items: center; justify-content: space-between; padding: 3px 10px 10px; }
+.unifi-nav-heading small { padding: 2px 5px; border: 1px solid var(--unifi-line); border-radius: 4px; color: var(--unifi-text-3); font-size: 8px; letter-spacing: .04em; }
+.unifi-nav-section { --unifi-nav-accent: var(--unifi-text-3); margin: 2px 0; }
+.unifi-nav-section[data-accent="blue"] { --unifi-nav-accent: var(--unifi-blue); }
+.unifi-nav-section[data-accent="cyan"] { --unifi-nav-accent: var(--unifi-cyan); }
+.unifi-nav-section[data-accent="violet"] { --unifi-nav-accent: var(--unifi-violet); }
+.unifi-nav-section[data-accent="green"] { --unifi-nav-accent: var(--unifi-green); }
+.unifi-nav-section[data-accent="red"] { --unifi-nav-accent: var(--unifi-red); }
+.unifi-nav-section[data-menu="logout"] { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--unifi-line); }
+.unifi-nav-root { min-height: 50px; height: auto; gap: 11px; padding: 6px 38px 6px 8px; border-radius: 8px; }
+.unifi-nav-icon-frame { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border: 1px solid var(--unifi-line); border-radius: 9px; background: var(--unifi-surface); color: var(--unifi-text-3); box-shadow: 0 1px 1px rgba(15, 23, 42, .025); transition: border-color .16s ease, color .16s ease, background-color .16s ease, transform .16s ease; }
+.unifi-nav-root:hover .unifi-nav-icon-frame { border-color: color-mix(in srgb, var(--unifi-nav-accent) 35%, var(--unifi-line)); color: var(--unifi-nav-accent); transform: translateY(-1px); }
+.unifi-nav-section.active > .unifi-nav-head .unifi-nav-root { background: color-mix(in srgb, var(--unifi-nav-accent) 9%, var(--unifi-surface)); color: var(--unifi-text); }
+.unifi-nav-section.active > .unifi-nav-head .unifi-nav-icon-frame { border-color: color-mix(in srgb, var(--unifi-nav-accent) 28%, transparent); background: color-mix(in srgb, var(--unifi-nav-accent) 13%, var(--unifi-surface)); color: var(--unifi-nav-accent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--unifi-nav-accent) 5%, transparent); }
+.unifi-nav-section.active > .unifi-nav-head::before { position: absolute; left: -10px; width: 3px; height: 28px; border-radius: 0 3px 3px 0; background: var(--unifi-nav-accent); content: ""; }
+.unifi-nav-copy { display: flex; min-width: 0; flex-direction: column; line-height: 1.05; }
+.unifi-nav-copy strong { overflow: hidden; color: inherit; font-size: 12.5px; font-weight: 590; text-overflow: ellipsis; white-space: nowrap; }
+.unifi-nav-copy small { margin-top: 5px; overflow: hidden; color: var(--unifi-text-3); font-size: 8.5px; font-weight: 470; text-overflow: ellipsis; white-space: nowrap; }
+.unifi-nav-section.active .unifi-nav-copy small { color: color-mix(in srgb, var(--unifi-nav-accent) 70%, var(--unifi-text-3)); }
+.unifi-nav-icon { width: 19px; height: 19px; }
+.unifi-nav-expander { right: 7px; }
+.unifi-expander-icon { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.unifi-nav-children { position: relative; margin-left: 24px; border-left: 1px solid var(--unifi-line); }
+.unifi-nav-section.open .unifi-nav-children { padding: 4px 0 7px; }
+.unifi-nav-children a { min-height: 35px; margin-left: 6px; gap: 8px; padding: 6px 8px; border-radius: 6px; }
+.unifi-child-icon-frame { display: grid; width: 25px; height: 25px; flex: 0 0 25px; place-items: center; border-radius: 6px; color: var(--unifi-text-3); }
+.unifi-nav-child-icon { width: 15px; height: 15px; }
+.unifi-nav-children li.selected a { background: color-mix(in srgb, var(--unifi-nav-accent) 7%, transparent); color: var(--unifi-nav-accent); }
+.unifi-nav-children li.selected a::before { left: -7px; width: 2px; height: 20px; background: var(--unifi-nav-accent); }
+.unifi-nav-children li.selected .unifi-child-icon-frame { background: color-mix(in srgb, var(--unifi-nav-accent) 12%, transparent); color: var(--unifi-nav-accent); }
+
+.unifi-device-meta { margin: 12px 2px 0; padding: 10px 8px; border: 1px solid var(--unifi-line); border-radius: 9px; background: var(--unifi-surface); box-shadow: var(--unifi-shadow-sm); }
+.unifi-device-icon { position: relative; display: grid; width: 32px; height: 32px; flex: 0 0 32px; place-items: center; border-radius: 8px; background: var(--unifi-blue-soft); color: var(--unifi-blue); }
+.unifi-device-icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.unifi-device-icon i { position: absolute; right: -1px; bottom: -1px; width: 8px; height: 8px; border: 2px solid var(--unifi-surface); border-radius: 50%; background: var(--unifi-green); }
+
+/* Live telemetry deck. Every value is sourced from LuCI's existing network and system models. */
+#unifi-dashboard[hidden] { display: none; }
+#unifi-dashboard { margin-bottom: 22px; }
+.unifi-telemetry { color: var(--unifi-text); }
+.unifi-telemetry-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin: 0 0 14px; }
+.unifi-eyebrow { display: block; margin-bottom: 4px; color: var(--unifi-text-3); font-size: 9px; font-weight: 680; letter-spacing: .09em; text-transform: uppercase; }
+.unifi-telemetry-heading h1 { margin: 0; color: var(--unifi-text); font-size: 22px; font-weight: 630; letter-spacing: -.03em; }
+.unifi-health-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border: 1px solid color-mix(in srgb, var(--unifi-green) 28%, var(--unifi-line)); border-radius: 999px; background: color-mix(in srgb, var(--unifi-green) 8%, var(--unifi-surface)); color: var(--unifi-green); font-size: 9px; font-weight: 680; letter-spacing: .05em; text-transform: uppercase; }
+.unifi-health-pill i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 12%, transparent); animation: unifi-live-pulse 2s ease-out infinite; }
+.unifi-kpi-grid { display: grid; grid-template-columns: repeat(3, minmax(150px, .72fr)) minmax(340px, 1.8fr); gap: 12px; }
+.unifi-kpi-card { position: relative; display: flex; min-width: 0; min-height: 126px; align-items: flex-start; gap: 12px; padding: 16px; overflow: hidden; border: 1px solid var(--unifi-line); border-radius: 10px; background: var(--unifi-surface); box-shadow: var(--unifi-shadow-sm); }
+.unifi-kpi-card::after { position: absolute; right: -24px; bottom: -38px; width: 100px; height: 100px; border-radius: 50%; background: color-mix(in srgb, var(--card-accent, var(--unifi-blue)) 5%, transparent); content: ""; }
+.unifi-kpi-card.is-connectivity { --card-accent: var(--unifi-green); }
+.unifi-kpi-card.is-ports { --card-accent: var(--unifi-blue); }
+.unifi-kpi-card.is-system { --card-accent: var(--unifi-violet); }
+.unifi-kpi-card.has-warning { --card-accent: var(--unifi-amber); }
+.unifi-kpi-icon { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border-radius: 9px; background: color-mix(in srgb, var(--card-accent, var(--unifi-blue)) 11%, var(--unifi-surface)); color: var(--card-accent, var(--unifi-blue)); }
+.unifi-kpi-svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.unifi-kpi-copy { display: flex; min-width: 0; flex-direction: column; }
+.unifi-kpi-copy > small:first-child { color: var(--unifi-text-3); font-size: 9px; font-weight: 640; letter-spacing: .055em; text-transform: uppercase; }
+.unifi-kpi-value { margin-top: 15px; overflow: hidden; color: var(--unifi-text); font-size: 21px; font-weight: 650; letter-spacing: -.035em; text-overflow: ellipsis; white-space: nowrap; }
+.unifi-kpi-copy > small:last-child { margin-top: 4px; color: var(--unifi-text-3); font-size: 10px; }
+.unifi-throughput-card { display: block; min-height: 126px; padding: 13px 15px 10px; }
+.unifi-kpi-card-head { position: relative; z-index: 1; display: flex; align-items: center; gap: 9px; }
+.unifi-kpi-card-head > span:nth-child(2) { display: flex; min-width: 0; align-items: center; gap: 7px; }
+.unifi-kpi-card-head small { color: var(--unifi-text-3); font-size: 9px; font-weight: 650; letter-spacing: .055em; text-transform: uppercase; }
+.unifi-live-label { padding: 2px 5px; border-radius: 4px; background: color-mix(in srgb, var(--unifi-green) 12%, transparent); color: var(--unifi-green); font-size: 7px; letter-spacing: .08em; }
+.unifi-throughput-values { position: absolute; z-index: 2; top: 48px; left: 15px; display: flex; gap: 20px; }
+.unifi-throughput-values > span { display: grid; grid-template-columns: 14px auto; align-items: center; column-gap: 5px; }
+.unifi-throughput-values small { grid-column: 2; color: var(--unifi-text-3); font-size: 8px; text-transform: uppercase; }
+.unifi-throughput-values strong { grid-column: 2; color: var(--unifi-text); font-size: 11px; font-weight: 620; }
+.unifi-rate-icon { grid-row: 1 / span 2; width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.unifi-throughput-values .is-rx { color: var(--unifi-blue); }
+.unifi-throughput-values .is-tx { color: var(--unifi-cyan); }
+.unifi-throughput-graph { position: absolute; z-index: 1; right: 8px; bottom: 8px; width: 58%; height: 68px; overflow: visible; }
+.unifi-throughput-gridline { stroke: var(--unifi-line); stroke-width: .7; stroke-dasharray: 2 3; }
+.unifi-throughput-line { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.unifi-throughput-line.is-rx { stroke: var(--unifi-blue); }
+.unifi-throughput-line.is-tx { stroke: var(--unifi-cyan); opacity: .8; }
+
+.unifi-port-panel { margin-top: 12px; padding: 0 15px 15px; border: 1px solid var(--unifi-line); border-radius: 10px; background: var(--unifi-surface); box-shadow: var(--unifi-shadow-sm); }
+.unifi-port-panel > header { display: flex; min-height: 54px; align-items: center; gap: 10px; border-bottom: 1px solid var(--unifi-line); }
+.unifi-panel-icon { display: grid; width: 30px; height: 30px; flex: 0 0 30px; place-items: center; border-radius: 8px; background: var(--unifi-blue-soft); color: var(--unifi-blue); }
+.unifi-panel-svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.unifi-port-panel > header > span:nth-child(2) { display: flex; flex-direction: column; line-height: 1.1; }
+.unifi-port-panel > header strong { color: var(--unifi-text); font-size: 12px; font-weight: 620; }
+.unifi-port-panel > header small { margin-top: 4px; color: var(--unifi-text-3); font-size: 9px; }
+.unifi-panel-summary { margin-left: auto; color: var(--unifi-text-3); font-size: 9px; }
+.unifi-port-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); gap: 8px; padding-top: 12px; }
+.unifi-port-tile { position: relative; display: flex; min-width: 0; align-items: center; gap: 9px; padding: 9px 8px; border: 1px solid var(--unifi-line); border-radius: 8px; background: color-mix(in srgb, var(--unifi-bg) 38%, var(--unifi-surface)); transition: border-color .16s ease, background-color .16s ease, transform .16s ease; }
+.unifi-port-tile:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--unifi-blue) 30%, var(--unifi-line)); background: var(--unifi-surface-hover); }
+.unifi-port-glyph { position: relative; display: grid; width: 29px; height: 29px; flex: 0 0 29px; place-items: center; border-radius: 7px; background: var(--unifi-bg); color: var(--unifi-text-3); }
+.unifi-port-svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.unifi-port-glyph i { position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border: 1px solid var(--unifi-surface); border-radius: 50%; background: var(--unifi-text-3); }
+.unifi-port-tile.is-online .unifi-port-glyph { background: color-mix(in srgb, var(--unifi-green) 10%, var(--unifi-surface)); color: var(--unifi-green); }
+.unifi-port-tile.is-online .unifi-port-glyph i { background: var(--unifi-green); box-shadow: 0 0 5px color-mix(in srgb, var(--unifi-green) 70%, transparent); }
+.unifi-port-tile.is-wan.is-online .unifi-port-glyph { background: color-mix(in srgb, var(--unifi-violet) 10%, var(--unifi-surface)); color: var(--unifi-violet); }
+.unifi-port-tile.is-wan.is-online .unifi-port-glyph i { background: var(--unifi-violet); box-shadow: 0 0 5px color-mix(in srgb, var(--unifi-violet) 70%, transparent); }
+.unifi-port-copy { display: flex; min-width: 0; flex: 1; flex-direction: column; }
+.unifi-port-copy strong { overflow: hidden; color: var(--unifi-text); font-size: 10.5px; font-weight: 630; text-overflow: ellipsis; white-space: nowrap; }
+.unifi-port-copy small { margin-top: 3px; overflow: hidden; color: var(--unifi-text-3); font-size: 8.5px; text-overflow: ellipsis; white-space: nowrap; }
+.unifi-port-role { padding: 2px 4px; border-radius: 4px; background: var(--unifi-bg); color: var(--unifi-text-3); font-size: 7px; font-weight: 700; letter-spacing: .05em; }
+.unifi-port-tile.is-wan .unifi-port-role { background: color-mix(in srgb, var(--unifi-violet) 10%, transparent); color: var(--unifi-violet); }
+.unifi-empty-state { grid-column: 1 / -1; margin: 5px 0 0; padding: 18px; color: var(--unifi-text-3); font-size: 11px; text-align: center; }
+#unifi-dashboard.is-compact .unifi-telemetry-heading { margin-bottom: 10px; }
+#unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: repeat(3, minmax(140px, .65fr)) minmax(320px, 1.6fr); }
+
+/* Turn the stock status overview into a controller-style responsive card grid. */
+body.unifi-overview-page #view > h2:first-child,
+body.unifi-overview-page #view > .cbi-map-descr:first-of-type { display: none; }
+body.unifi-overview-page .includes { display: grid !important; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px; }
+body.unifi-overview-page .includes > .cbi-section { display: block; grid-column: span 6; margin: 0; min-width: 0; }
+body.unifi-overview-page .includes > .unifi-port-status-section,
+body.unifi-overview-page .includes > .unifi-network-status-section { grid-column: 1 / -1; }
+body.unifi-overview-page .includes > .unifi-metric-section { grid-column: span 4; }
+.unifi-overview-section > .cbi-title h3 { margin: 0; padding: 14px 16px 12px; border-bottom: 1px solid var(--unifi-line); font-size: 12px; }
+.unifi-overview-section > .cbi-title h3 > .label { min-height: 24px; padding: 2px 8px; border: 1px solid var(--unifi-line); background: var(--unifi-bg); color: var(--unifi-text-3); }
+.unifi-overview-section > div:last-child { padding: 0 14px 14px; }
+.unifi-overview-section .table { border: 0; border-radius: 0; box-shadow: none; }
+.unifi-overview-section .table .td { padding: 8px 5px; border-top-color: var(--unifi-line); font-size: 10.5px; }
+.unifi-overview-section .table .td:first-child { color: var(--unifi-text-3); font-size: 9px; font-weight: 570; letter-spacing: .025em; text-transform: uppercase; }
+.cbi-progressbar { height: 7px; overflow: hidden; border: 0; border-radius: 99px; background: var(--unifi-line); box-shadow: none; }
+.cbi-progressbar > div { border: 0; border-radius: inherit; background: linear-gradient(90deg, var(--unifi-blue), var(--unifi-cyan)); box-shadow: none; }
+
+/* Stock 25.12 port include: retain its PoE, VLAN, counters and tooltips, restyle only. */
+.unifi-port-status-section > div:last-child > div { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)) !important; gap: 8px; margin: 0 !important; padding-top: 14px; }
+.unifi-luci-port.ifacebox { min-width: 0 !important; max-width: none !important; margin: 0 !important; overflow: hidden; border-color: var(--unifi-line); border-radius: 8px; background: color-mix(in srgb, var(--unifi-bg) 35%, var(--unifi-surface)); transition: border-color .16s ease, transform .16s ease; }
+.unifi-luci-port.ifacebox:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--unifi-blue) 32%, var(--unifi-line)); }
+.unifi-luci-port .ifacebox-head { min-height: 26px; padding: 5px 7px; border-radius: 0; background: transparent; color: var(--unifi-text-2); font-size: 9px; }
+.unifi-luci-port .ifacebox-body { padding: 7px; color: var(--unifi-text-3); font-size: 9px; text-align: center; }
+.unifi-luci-port .ifacebox-body img { width: 32px; height: 32px; filter: saturate(.8); }
+.unifi-luci-port .zonebadge { border: 0; border-radius: 99px; }
+.network-status-table { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+.unifi-uplink-card.ifacebox { width: auto; margin: 0; overflow: hidden; border-radius: 8px; }
+.unifi-uplink-card .ifacebox-head { padding: 9px 11px; border-radius: 0; background: var(--unifi-bg); color: var(--unifi-text-2); }
+.unifi-uplink-card .ifacebox-head.active { background: color-mix(in srgb, var(--unifi-green) 9%, var(--unifi-surface)); color: var(--unifi-green); }
+.unifi-uplink-card .ifacebox-body { padding: 11px; }
+
+/* Realtime LuCI charts, with the native three-second polling untouched. */
+.unifi-realtime-page .cbi-map > .cbi-section { padding: 14px; }
+.unifi-stock-chart { width: 100% !important; height: 280px !important; overflow: hidden; border: 1px solid var(--unifi-line) !important; border-radius: 9px; background: linear-gradient(180deg, color-mix(in srgb, var(--unifi-blue) 4%, var(--unifi-surface)), var(--unifi-surface)) !important; }
+.unifi-stock-chart > svg { display: block; width: 100%; height: 100%; }
+.unifi-stock-chart svg #rx { fill: var(--unifi-blue) !important; fill-opacity: .13 !important; stroke: var(--unifi-blue) !important; stroke-width: 1.6 !important; }
+.unifi-stock-chart svg #tx { fill: var(--unifi-cyan) !important; fill-opacity: .10 !important; stroke: var(--unifi-cyan) !important; stroke-width: 1.6 !important; }
+.unifi-stock-chart svg line { stroke: var(--unifi-line-strong) !important; stroke-width: .6 !important; stroke-dasharray: 3 4; }
+.unifi-stock-chart svg text { fill: var(--unifi-text-3) !important; font-family: var(--font-sans) !important; font-size: 9px !important; text-shadow: none !important; }
+.unifi-realtime-page .cbi-section > .table { margin-top: 10px; }
+.unifi-realtime-page .cbi-section > .table .td { background: transparent; }
+
+/* Higher-density controller tables and semantic state colors. */
+.unifi-data-table .ifacebadge img { width: 20px; height: 20px; }
+.unifi-data-table .label[data-style="success"],
+.label.success { background: color-mix(in srgb, var(--unifi-green) 11%, var(--unifi-surface)); color: var(--unifi-green); }
+.unifi-data-table .label[data-style="warning"],
+.label.warning { background: color-mix(in srgb, var(--unifi-amber) 11%, var(--unifi-surface)); color: var(--unifi-amber); }
+.unifi-data-table .label[data-style="danger"],
+.label.error { background: color-mix(in srgb, var(--unifi-red) 11%, var(--unifi-surface)); color: var(--unifi-red); }
+.unifi-command-panel > label > svg { width: 19px; height: 19px; flex: 0 0 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+
+@keyframes unifi-live-pulse {
+	0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--unifi-green) 34%, transparent); }
+	70%, 100% { box-shadow: 0 0 0 7px transparent; }
+}
+
+@media (max-width: 1280px) {
+	.unifi-kpi-grid,
+	#unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: repeat(3, minmax(140px, 1fr)); }
+	.unifi-throughput-card { grid-column: 1 / -1; }
+	body.unifi-overview-page .includes > .unifi-metric-section { grid-column: span 6; }
 }

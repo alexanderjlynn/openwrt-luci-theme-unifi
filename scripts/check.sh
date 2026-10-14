@@ -11,6 +11,7 @@ ucode/template/themes/unifi/sysauth.ut
 htdocs/luci-static/unifi/cascade.css
 htdocs/luci-static/unifi/mobile.css
 htdocs/luci-static/unifi/mark.svg
+htdocs/luci-static/unifi/icons.svg
 htdocs/luci-static/resources/menu-unifi.js
 htdocs/luci-static/resources/view/unifi/sysauth.js'
 

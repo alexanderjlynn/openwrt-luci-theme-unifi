@@ -6,10 +6,12 @@
 	#unifi-topbar { padding: 0 10px; }
 	#unifi-mobile-toggle { display: inline-flex; flex-direction: column; }
 	.unifi-product { flex-basis: auto; }
-	.unifi-product span { display: none; }
+	.unifi-product > span { display: none; }
 	.unifi-product img { width: 29px; height: 29px; }
 	.unifi-context { margin-left: 4px; }
-	.unifi-context-site { display: none; }
+	.unifi-site-pill,
+	.unifi-context-divider { display: none; }
+	.unifi-page-context { max-width: 32vw; }
 	.unifi-search-button { width: 34px; min-width: 34px; padding: 0; border-color: transparent; background: transparent; }
 	.unifi-search-button > span:nth-child(2),
 	.unifi-search-button kbd { display: none; }
@@ -60,6 +62,17 @@
 	table { display: block; max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
 	.unifi-command { padding-top: 8vh; }
 	.unifi-footer { flex-wrap: wrap; justify-content: flex-start; }
+	.unifi-kpi-grid,
+	#unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.unifi-kpi-card { min-height: 112px; }
+	.unifi-throughput-card { grid-column: 1 / -1; min-height: 132px; }
+	.unifi-port-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	body.unifi-overview-page .includes { grid-template-columns: 1fr; }
+	body.unifi-overview-page .includes > .cbi-section,
+	body.unifi-overview-page .includes > .unifi-metric-section,
+	body.unifi-overview-page .includes > .unifi-port-status-section,
+	body.unifi-overview-page .includes > .unifi-network-status-section { grid-column: 1; }
+	.unifi-stock-chart { height: 230px !important; }
 }
 
 @media (max-width: 520px) {
@@ -69,4 +82,18 @@
 	.cbi-section { border-right: 0; border-left: 0; border-radius: 0; }
 	.unifi-login-page { padding: 14px; }
 	.unifi-login-card { padding: 24px 20px; }
+	.unifi-telemetry-heading h1 { font-size: 19px; }
+	.unifi-health-pill { display: none; }
+	.unifi-kpi-grid,
+	#unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: 1fr; }
+	.unifi-kpi-card { min-height: 100px; }
+	.unifi-throughput-card { grid-column: 1; min-height: 150px; }
+	.unifi-throughput-values { gap: 12px; }
+	.unifi-throughput-graph { right: 6px; bottom: 6px; width: 52%; height: 62px; }
+	.unifi-port-panel { padding-right: 10px; padding-left: 10px; }
+	.unifi-panel-summary { display: none; }
+	.unifi-port-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+	.unifi-port-tile { gap: 7px; padding: 8px 6px; }
+	.unifi-port-role { display: none; }
+	.unifi-port-status-section > div:last-child > div { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }

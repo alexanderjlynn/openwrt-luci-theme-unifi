@@ -1,6 +1,6 @@
 # LuCI Network Theme — Design Document
 
-Status: first implementation
+Status: v0.2 controller telemetry implementation
 
 Target: OpenWrt 25.12.5 / current LuCI
 
@@ -35,7 +35,8 @@ top-level menu does not alter the dispatcher tree or page contents.
 4. **No cloud dependency.** Fonts, icons, and scripts are local and the UI works
    when the WAN is down.
 5. **Respect constrained hardware.** No framework, runtime dependency, canvas,
-   polling loop, or large image background.
+   independent timer, historical database, or large image background. Live
+   values use LuCI's shared polling scheduler and existing cached models.
 6. **Familiar, not counterfeit.** Match the interaction quality and visual
    language while using original branding and open assets.
 
@@ -48,10 +49,10 @@ LuCI route + view
        │
        └── luci-theme-unifi
              ├── header.ut / footer.ut       application frame
-             ├── menu-unifi.js               live menu, tabs, search, preferences
+             ├── menu-unifi.js               menu, search, preferences, live telemetry
              ├── cascade.css / mobile.css    visual system and responsive layout
              ├── sysauth.ut / sysauth.js     sign-in presentation
-             └── local font + original mark  offline assets
+             └── local font + original SVGs  offline assets
 ```
 
 Depending on `luci-theme-bootstrap` is deliberate. Its CSS tracks obscure and
@@ -108,6 +109,19 @@ page context and high-value actions. Form labels stack over controls and wide
 tables scroll inside their own surface. At 520 px nonessential status chips are
 hidden.
 
+### Live telemetry
+
+Status → Overview and the core interface view receive a progressive telemetry
+deck. It reads `network.Device` carrier, negotiated speed, duplex, and byte
+counters plus `system.info` uptime and load. Rates are calculated from counter
+deltas on LuCI's shared three-second polling scheduler. If an RPC or device
+model is unavailable, the stock view remains usable and the enhancement simply
+shows an unavailable or empty state.
+
+The stock 25.12 port include remains below the deck and continues to own PoE,
+VLAN, zone, counter, and tooltip data. The stock realtime graph views retain
+their own data collection; the theme changes their presentation only.
+
 ## Visual system
 
 - Font: Inter Variable, served locally, with native UI font fallbacks.
@@ -116,7 +130,7 @@ hidden.
 - Radius: 5 px controls, 8 px panels, 12–14 px elevated dialogs.
 - Borders: low-contrast structure replaces heavy shadows.
 - Type: 14 px base; 10–13 px chrome; 22–24 px primary headings.
-- Icons: original inline outline set with 24 px view boxes and 1.7 px strokes.
+- Icons: original local SVG symbol set with 24 px view boxes and 1.7 px strokes.
 
 Tokens live at the top of `cascade.css`. Components consume tokens instead of
 literal colors wherever browser support permits.
@@ -168,8 +182,8 @@ installing the replacement public key before releases switch to the new signer.
 
 - reproducing Ubiquiti logos, names inside the product shell, or proprietary art;
 - changing UCI schema or server endpoints;
-- merging unrelated LuCI pages into a custom dashboard;
-- adding telemetry, cloud login, or remote resources;
+- replacing LuCI views or storing a second copy of telemetry;
+- adding cloud login, remote resources, or a proprietary controller protocol;
 - hiding capabilities that do not fit the preferred navigation order;
 - styling only a curated set of applications at the expense of unknown apps.
 

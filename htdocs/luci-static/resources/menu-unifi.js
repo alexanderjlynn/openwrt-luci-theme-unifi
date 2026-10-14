@@ -1,66 +1,103 @@
 'use strict';
 'require baseclass';
 'require ui';
+'require network';
+'require poll';
+'require rpc';
 
-const ICONS = {
-	status: '<path d="M4 13a8 8 0 1 1 16 0"/><path d="m12 13 4-4"/><path d="M5 17h14"/>',
-	network: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9S14.4 18.5 12 21c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3Z"/>',
-	services: '<rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/>',
-	vpn: '<path d="M12 3 4.5 6v5c0 4.8 3 8.2 7.5 10 4.5-1.8 7.5-5.2 7.5-10V6L12 3Z"/><path d="m9 12 2 2 4-4"/>',
-	system: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6"/>',
-	logout: '<path d="M10 5H5v14h5M14 8l4 4-4 4M9 12h9"/>',
-	overview: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
-	wireless: '<path d="M4 9a12 12 0 0 1 16 0M7 13a8 8 0 0 1 10 0M10 17a3 3 0 0 1 4 0"/><circle cx="12" cy="20" r=".7" fill="currentColor" stroke="none"/>',
-	interfaces: '<path d="M5 8h14v8H5z"/><path d="M8 12h.01M11 12h.01M15 11v2M18 11v2M9 16v3m6-3v3M7 19h10"/>',
-	devices: '<rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/>',
-	dhcp: '<circle cx="6" cy="12" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 12h4m0 0 4-5m-4 5 4 5"/>',
-	routes: '<path d="M5 19V8a3 3 0 0 1 3-3h8"/><path d="m13 2 3 3-3 3M8 19l-3 3-3-3"/>',
-	firewall: '<path d="M4 4h16v16H4zM4 9h5V4m6 0v5h5M9 9v6H4m5 5v-5h6v5m0-11v6h5"/>',
-	diagnostics: '<path d="M4 19h16M6 16l3-5 3 3 4-8 2 4"/>',
-	processes: '<path d="M4 8h16M4 16h16"/><circle cx="8" cy="8" r="2" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="2" fill="currentColor" stroke="none"/>',
-	logs: '<path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4M9 11h6M9 15h6"/>',
-	realtime: '<path d="M3 13h4l2-6 4 11 2-7 2 2h4"/>',
-	administration: '<circle cx="12" cy="8" r="3"/><path d="M5 21a7 7 0 0 1 14 0M18 3v4m-2-2h4"/>',
-	startup: '<path d="M12 3v9"/><path d="M7 6.5a8 8 0 1 0 10 0"/>',
-	backup: '<path d="M4 5h12l4 4v10H4z"/><path d="M8 5v5h8V5M8 19v-5h8v5"/>',
-	reboot: '<path d="M20 11a8 8 0 1 1-2.3-5.7"/><path d="M20 4v7h-7"/>',
-	software: '<path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/>',
-	default: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>'
+const callSystemInfo = rpc.declare({
+	object: 'system',
+	method: 'info',
+	expect: { '': {} }
+});
+
+const ICON_ALIASES = {
+	status: 'dashboard', network: 'topology', services: 'apps', vpn: 'shield',
+	system: 'settings', logout: 'power', overview: 'overview', wireless: 'wifi',
+	interfaces: 'ports', interface: 'ports', devices: 'device', device: 'device',
+	dhcp: 'server', dns: 'server', hosts: 'clients', host: 'clients', clients: 'clients',
+	routes: 'route', route: 'route', firewall: 'firewall', diagnostics: 'pulse',
+	processes: 'cpu', process: 'cpu', logs: 'document', log: 'document',
+	realtime: 'chart', graphs: 'chart', statistics: 'chart', administration: 'user-settings',
+	admin: 'user-settings', startup: 'power', init: 'power', backup: 'backup', flash: 'backup',
+	reboot: 'restart', software: 'package', packages: 'package', package: 'package',
+	storage: 'storage', samba: 'storage', minidlna: 'storage', printer: 'printer',
+	qos: 'sliders', sqm: 'sliders', mwan: 'route', wireguard: 'lock', openvpn: 'lock',
+	banip: 'shield', adblock: 'shield', rules: 'filter', zones: 'firewall', switch: 'ports',
+	terminal: 'document', commands: 'document', scheduledtasks: 'document', chevrondown: 'chevron-down',
+	ports: 'ports', globe: 'globe', clock: 'clock', activity: 'activity', ethernet: 'ethernet',
+	download: 'download', upload: 'upload', sun: 'sun', moon: 'moon', monitor: 'monitor'
 };
 
+const ICON_SPRITE = '/luci-static/unifi/icons.svg#unifi-';
+
+function resolveIcon(name) {
+	const key = String(name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+	if (ICON_ALIASES[key]) return ICON_ALIASES[key];
+	if (key.includes('wifi') || key.includes('wireless')) return 'wifi';
+	if (key.includes('interface') || key.includes('ethernet') || key.includes('port')) return 'ports';
+	if (key.includes('device') || key.includes('switch')) return 'device';
+	if (key.includes('dhcp') || key.includes('dns') || key.includes('host')) return 'server';
+	if (key.includes('route') || key.includes('mwan')) return 'route';
+	if (key.includes('firewall') || key.includes('zone')) return 'firewall';
+	if (key.includes('diagnostic') || key.includes('ping')) return 'pulse';
+	if (key.includes('process') || key.includes('cpu')) return 'cpu';
+	if (key.includes('log')) return 'document';
+	if (key.includes('realtime') || key.includes('graph') || key.includes('statistic')) return 'chart';
+	if (key.includes('admin') || key.includes('password') || key.includes('user')) return 'user-settings';
+	if (key.includes('startup') || key.includes('init')) return 'power';
+	if (key.includes('backup') || key.includes('flash')) return 'backup';
+	if (key.includes('reboot') || key.includes('restart')) return 'restart';
+	if (key.includes('package') || key.includes('software')) return 'package';
+	if (key.includes('vpn') || key.includes('tunnel')) return 'lock';
+	return 'default';
+}
+
 function icon(name, className) {
-	const key = String(name || '').toLowerCase();
-	const markup = ICONS[key] ||
-		(key.includes('wifi') || key.includes('wireless') ? ICONS.wireless : null) ||
-		(key.includes('interface') ? ICONS.interfaces : null) ||
-		(key.includes('device') || key.includes('switch') ? ICONS.devices : null) ||
-		(key.includes('dhcp') || key.includes('dns') || key.includes('host') ? ICONS.dhcp : null) ||
-		(key.includes('route') ? ICONS.routes : null) ||
-		(key.includes('firewall') ? ICONS.firewall : null) ||
-		(key.includes('diagnostic') ? ICONS.diagnostics : null) ||
-		(key.includes('process') ? ICONS.processes : null) ||
-		(key.includes('log') ? ICONS.logs : null) ||
-		(key.includes('realtime') || key.includes('graph') ? ICONS.realtime : null) ||
-		(key.includes('admin') || key.includes('password') ? ICONS.administration : null) ||
-		(key.includes('startup') || key.includes('init') ? ICONS.startup : null) ||
-		(key.includes('backup') || key.includes('flash') ? ICONS.backup : null) ||
-		(key.includes('reboot') ? ICONS.reboot : null) ||
-		(key.includes('package') || key.includes('software') ? ICONS.software : null) ||
-		ICONS.default;
 	const svg = E('svg', {
 		'class': className || 'unifi-nav-icon',
 		'viewBox': '0 0 24 24',
 		'aria-hidden': 'true',
 		'focusable': 'false'
 	});
-	svg.innerHTML = markup;
+	const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+	use.setAttribute('href', ICON_SPRITE + resolveIcon(name));
+	svg.appendChild(use);
 	return svg;
+}
+
+function formatRate(bytesPerSecond) {
+	let bits = Math.max(0, Number(bytesPerSecond) || 0) * 8;
+	const units = [ 'bps', 'Kbps', 'Mbps', 'Gbps', 'Tbps' ];
+	let unit = 0;
+	while (bits >= 1000 && unit < units.length - 1) { bits /= 1000; unit++; }
+	return `${bits >= 100 || unit === 0 ? bits.toFixed(0) : bits >= 10 ? bits.toFixed(1) : bits.toFixed(2)} ${units[unit]}`;
+}
+
+function formatSpeed(speed) {
+	if (speed == null || speed < 0) return _('No link');
+	if (speed >= 1000) return `${Number((speed / 1000).toFixed(speed % 1000 ? 1 : 0))} Gbps`;
+	return `${speed} Mbps`;
+}
+
+function formatUptime(seconds) {
+	seconds = Math.max(0, Number(seconds) || 0);
+	const days = Math.floor(seconds / 86400);
+	const hours = Math.floor((seconds % 86400) / 3600);
+	const minutes = Math.floor((seconds % 3600) / 60);
+	return days ? `${days}d ${hours}h` : hours ? `${hours}h ${minutes}m` : `${minutes}m`;
 }
 
 return baseclass.extend({
 	__init__() {
 		this.searchEntries = [];
 		this.searchSelection = 0;
+		this.telemetry = {
+			lastAt: 0,
+			counters: {},
+			rxHistory: Array(48).fill(0),
+			txHistory: Array(48).fill(0)
+		};
 		ui.menu.load().then((tree) => this.render(tree));
 	},
 
@@ -75,6 +112,8 @@ return baseclass.extend({
 		this.renderTabs(activeMode);
 		this.bindShell();
 		this.buildCommandMenu();
+		this.enhanceLuCIViews();
+		this.initTelemetry();
 	},
 
 	renderModeMenu(modes, activeMode) {
@@ -94,21 +133,30 @@ return baseclass.extend({
 	renderMainMenu(mode, baseUrl) {
 		const container = document.querySelector('#mainmenu');
 		const preferred = { status: 10, network: 20, services: 30, vpn: 40, system: 50, logout: 90 };
+		const accents = { status: 'cyan', network: 'blue', services: 'violet', vpn: 'green', system: 'slate', logout: 'red' };
 		const groups = ui.menu.getChildren(mode).map((node, index) => ({ node, index }));
 		groups.sort((a, b) => (preferred[a.node.name] || 60) - (preferred[b.node.name] || 60) || a.index - b.index);
 
-		container.appendChild(E('div', { class: 'unifi-nav-heading' }, _('Navigation')));
+		container.appendChild(E('div', { class: 'unifi-nav-heading' }, [
+			E('span', {}, _('Network Control')),
+			E('small', {}, _('LuCI'))
+		]));
 		groups.forEach(({ node }) => {
 			const children = ui.menu.getChildren(node);
 			const active = L.env.requestpath[1] === node.name;
 			const section = E('section', {
 				'class': 'unifi-nav-section' + (active ? ' active open' : ''),
-				'data-menu': node.name
+				'data-menu': node.name,
+				'data-accent': accents[node.name] || 'slate'
 			});
 			const head = E('div', { class: 'unifi-nav-head' });
 			const href = L.url(baseUrl, node.name);
 			const link = E('a', { href, class: 'unifi-nav-root' }, [
-				icon(node.name), E('span', {}, _(node.title))
+				E('span', { class: 'unifi-nav-icon-frame' }, icon(node.name)),
+				E('span', { class: 'unifi-nav-copy' }, [
+					E('strong', {}, _(node.title)),
+					E('small', {}, this.groupSubtitle(node.name))
+				])
 			]);
 			head.appendChild(link);
 
@@ -120,7 +168,7 @@ return baseclass.extend({
 					class: 'unifi-nav-expander',
 					'aria-label': _('Expand menu'),
 					'aria-expanded': active ? 'true' : 'false'
-				}, '⌄');
+				}, icon('chevron-down', 'unifi-expander-icon'));
 				toggle.addEventListener('click', () => {
 					const open = section.classList.toggle('open');
 					toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -136,7 +184,8 @@ return baseclass.extend({
 					const childUrl = L.url(baseUrl, node.name, child.name);
 					list.appendChild(E('li', { class: selected ? 'selected' : '' }, [
 						E('a', { href: childUrl, 'aria-current': selected ? 'page' : null }, [
-							icon(child.name, 'unifi-nav-child-icon'), E('span', {}, _(child.title))
+							E('span', { class: 'unifi-child-icon-frame' }, icon(child.name, 'unifi-nav-child-icon')),
+							E('span', {}, _(child.title))
 						])
 					]));
 					this.addSearchEntry(_(child.title), childUrl, _(node.title), child.name);
@@ -146,6 +195,18 @@ return baseclass.extend({
 			}
 			container.appendChild(section);
 		});
+	},
+
+	groupSubtitle(name) {
+		const subtitles = {
+			status: _('Health & telemetry'),
+			network: _('Ports & networks'),
+			services: _('Applications'),
+			vpn: _('Secure access'),
+			system: _('Console settings'),
+			logout: _('End session')
+		};
+		return subtitles[name] || _('Configuration');
 	},
 
 	collectSearchChildren(node, url, trail) {
@@ -213,7 +274,14 @@ return baseclass.extend({
 			document.documentElement.setAttribute('data-color-mode', mode);
 			if (dark) document.documentElement.setAttribute('data-darkmode', 'true');
 			else document.documentElement.removeAttribute('data-darkmode');
-			if (colorButton) colorButton.dataset.mode = mode;
+			if (colorButton) {
+				colorButton.dataset.mode = mode;
+				const themeIcon = colorButton.querySelector('use');
+				if (themeIcon) themeIcon.setAttribute('href', ICON_SPRITE + (mode === 'dark' ? 'moon' : mode === 'light' ? 'sun' : 'monitor'));
+				const modeLabel = mode === 'dark' ? _('Dark') : mode === 'light' ? _('Light') : _('Auto');
+				colorButton.setAttribute('title', _('Color mode: %s').format(modeLabel));
+				colorButton.setAttribute('aria-label', _('Color mode: %s').format(modeLabel));
+			}
 		};
 		let colorMode = document.documentElement.getAttribute('data-color-mode') || 'auto';
 		applyColorMode(colorMode);
@@ -225,6 +293,229 @@ return baseclass.extend({
 		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
 			if (colorMode === 'auto') applyColorMode(colorMode);
 		});
+	},
+
+	initTelemetry() {
+		const target = document.querySelector('#unifi-dashboard');
+		if (!target) return;
+
+		const route = L.env.requestpath.join('/').toLowerCase();
+		const isOverview = /(^|\/)status\/(overview|index)$/.test(route);
+		const isNetwork = /(^|\/)network\/(network|interfaces|devices)$/.test(route);
+		if (!isOverview && !isNetwork) return;
+
+		target.hidden = false;
+		target.classList.toggle('is-compact', !isOverview);
+		document.body.classList.toggle('unifi-overview-page', isOverview);
+		target.replaceChildren(this.buildTelemetryShell(isOverview));
+
+		const update = () => L.resolveDefault(network.flushCache()
+			.then(() => Promise.all([
+				L.resolveDefault(network.getDevices(), []),
+				L.resolveDefault(callSystemInfo(), {})
+			]))
+			.then((data) => this.updateTelemetry(data[0], data[1])), null);
+
+		update();
+		poll.add(update, 3);
+	},
+
+	buildTelemetryShell(full) {
+		const liveGraph = E('svg', {
+			class: 'unifi-throughput-graph',
+			viewBox: '0 0 320 72',
+			preserveAspectRatio: 'none',
+			role: 'img',
+			'aria-label': _('Live receive and transmit throughput')
+		});
+		for (let y = 18; y < 72; y += 18)
+			liveGraph.appendChild(E('line', { x1: 0, y1: y, x2: 320, y2: y, class: 'unifi-throughput-gridline' }));
+		const rxLine = E('polyline', { class: 'unifi-throughput-line is-rx', points: '' });
+		const txLine = E('polyline', { class: 'unifi-throughput-line is-tx', points: '' });
+		liveGraph.append(rxLine, txLine);
+
+		const onlineValue = E('strong', { class: 'unifi-kpi-value' }, _('Checking…'));
+		const onlineDetail = E('small', {}, _('Reading interface state'));
+		const portsValue = E('strong', { class: 'unifi-kpi-value' }, '—');
+		const portsDetail = E('small', {}, _('Ethernet links'));
+		const uptimeValue = E('strong', { class: 'unifi-kpi-value' }, '—');
+		const uptimeDetail = E('small', {}, _('Gateway uptime'));
+		const rxValue = E('strong', {}, '0 bps');
+		const txValue = E('strong', {}, '0 bps');
+		const portGrid = E('div', { class: 'unifi-port-grid' });
+		const portSummary = E('span', { class: 'unifi-panel-summary' }, _('Discovering ports…'));
+
+		this.telemetryNodes = {
+			onlineValue, onlineDetail, portsValue, portsDetail, uptimeValue, uptimeDetail,
+			rxValue, txValue, rxLine, txLine, portGrid, portSummary
+		};
+
+		const kpiGrid = E('div', { class: 'unifi-kpi-grid' }, [
+			this.telemetryCard('globe', _('Connectivity'), onlineValue, onlineDetail, 'connectivity'),
+			this.telemetryCard('ports', _('Active ports'), portsValue, portsDetail, 'ports'),
+			this.telemetryCard('clock', _('System uptime'), uptimeValue, uptimeDetail, 'system'),
+			E('article', { class: 'unifi-kpi-card unifi-throughput-card' }, [
+				E('div', { class: 'unifi-kpi-card-head' }, [
+					E('span', { class: 'unifi-kpi-icon is-activity' }, icon('realtime', 'unifi-kpi-svg')),
+					E('span', {}, [E('small', {}, _('Live throughput')), E('b', { class: 'unifi-live-label' }, _('LIVE'))])
+				]),
+				E('div', { class: 'unifi-throughput-values' }, [
+					E('span', { class: 'is-rx' }, [icon('download', 'unifi-rate-icon'), E('small', {}, _('Down')), rxValue]),
+					E('span', { class: 'is-tx' }, [icon('upload', 'unifi-rate-icon'), E('small', {}, _('Up')), txValue])
+				]),
+				liveGraph
+			])
+		]);
+
+		return E('section', { class: 'unifi-telemetry', 'aria-label': _('Network telemetry') }, [
+			E('div', { class: 'unifi-telemetry-heading' }, [
+				E('div', {}, [
+					E('span', { class: 'unifi-eyebrow' }, full ? _('Gateway console') : _('Interface telemetry')),
+					E('h1', {}, full ? _('Network health') : _('Ports & throughput'))
+				]),
+				E('span', { class: 'unifi-health-pill' }, [E('i'), _('Live')])
+			]),
+			kpiGrid,
+			E('section', { class: 'unifi-port-panel' }, [
+				E('header', {}, [
+					E('span', { class: 'unifi-panel-icon' }, icon('interfaces', 'unifi-panel-svg')),
+					E('span', {}, [E('strong', {}, _('Ethernet ports')), E('small', {}, _('Negotiated link state and speed'))]),
+					portSummary
+				]),
+				portGrid
+			])
+		]);
+	},
+
+	telemetryCard(iconName, label, valueNode, detailNode, kind) {
+		return E('article', { class: `unifi-kpi-card is-${kind}` }, [
+			E('span', { class: `unifi-kpi-icon is-${kind}` }, icon(iconName, 'unifi-kpi-svg')),
+			E('span', { class: 'unifi-kpi-copy' }, [E('small', {}, label), valueNode, detailNode])
+		]);
+	},
+
+	updateTelemetry(devices, systemInfo) {
+		const nodes = this.telemetryNodes;
+		if (!nodes) return;
+
+		let ports = devices.filter((dev) => {
+			const name = dev.getName();
+			const type = dev.getType();
+			return name && name !== 'lo' && !name.includes('.') && (type === 'ethernet' || type === 'switch') &&
+				(dev.getSpeed() != null || dev.isBridgePort() || /^(eth|lan|wan|en|sfp|swp)/i.test(name));
+		});
+		ports.sort((a, b) => a.getName().localeCompare(b.getName(), undefined, { numeric: true }));
+
+		const now = Date.now();
+		const elapsed = this.telemetry.lastAt ? Math.max(.25, (now - this.telemetry.lastAt) / 1000) : 0;
+		let rxRate = 0;
+		let txRate = 0;
+		for (const dev of ports) {
+			const name = dev.getName();
+			const rx = dev.getRXBytes();
+			const tx = dev.getTXBytes();
+			const previous = this.telemetry.counters[name];
+			if (elapsed && previous) {
+				rxRate += Math.max(0, rx - previous.rx) / elapsed;
+				txRate += Math.max(0, tx - previous.tx) / elapsed;
+			}
+			this.telemetry.counters[name] = { rx, tx };
+		}
+		this.telemetry.lastAt = now;
+		this.telemetry.rxHistory.push(rxRate);
+		this.telemetry.txHistory.push(txRate);
+		this.telemetry.rxHistory = this.telemetry.rxHistory.slice(-48);
+		this.telemetry.txHistory = this.telemetry.txHistory.slice(-48);
+
+		const active = ports.filter((dev) => dev.getCarrier() || dev.getSpeed() > 0);
+		const wanPorts = ports.filter((dev) => /(^|[-_.])wan([0-9]|$)/i.test(dev.getName()));
+		const connectivityUp = wanPorts.length ? wanPorts.some((dev) => dev.getCarrier() || dev.getSpeed() > 0) : active.length > 0;
+		nodes.onlineValue.textContent = connectivityUp ? _('Online') : _('Attention');
+		nodes.onlineValue.closest('.unifi-kpi-card').classList.toggle('has-warning', !connectivityUp);
+		nodes.onlineDetail.textContent = wanPorts.length
+			? N_(wanPorts.length, '%d WAN link', '%d WAN links').format(wanPorts.length)
+			: _('Gateway link state');
+		nodes.portsValue.textContent = `${active.length} / ${ports.length}`;
+		nodes.portsDetail.textContent = _('connected');
+		nodes.uptimeValue.textContent = formatUptime(systemInfo.uptime);
+		const load = Array.isArray(systemInfo.load) ? systemInfo.load[0] / 65535 : null;
+		nodes.uptimeDetail.textContent = load == null ? _('Gateway uptime') : _('Load %.2f').format(load);
+		nodes.rxValue.textContent = formatRate(rxRate);
+		nodes.txValue.textContent = formatRate(txRate);
+		nodes.portSummary.textContent = N_(ports.length, '%d detected port', '%d detected ports').format(ports.length);
+
+		this.updateSparkline(nodes.rxLine, this.telemetry.rxHistory);
+		this.updateSparkline(nodes.txLine, this.telemetry.txHistory);
+		this.renderPorts(nodes.portGrid, ports);
+	},
+
+	updateSparkline(line, values) {
+		const width = 320;
+		const height = 66;
+		const max = Math.max(1, ...this.telemetry.rxHistory, ...this.telemetry.txHistory);
+		const step = width / Math.max(1, values.length - 1);
+		line.setAttribute('points', values.map((value, index) => `${(index * step).toFixed(1)},${(height - (value / max) * (height - 8)).toFixed(1)}`).join(' '));
+	},
+
+	renderPorts(container, ports) {
+		container.replaceChildren();
+		if (!ports.length) {
+			container.appendChild(E('p', { class: 'unifi-empty-state' }, _('No physical Ethernet ports were reported by this device.')));
+			return;
+		}
+
+		ports.slice(0, 24).forEach((dev) => {
+			const name = dev.getName();
+			const speed = dev.getSpeed();
+			const carrier = dev.getCarrier() || speed > 0;
+			const role = /wan/i.test(name) ? 'wan' : 'lan';
+			const duplex = dev.getDuplex();
+			container.appendChild(E('article', {
+				class: `unifi-port-tile is-${carrier ? 'online' : 'offline'} is-${role}`,
+				title: carrier
+					? _('Port %s: %s, %s duplex').format(name, formatSpeed(speed), duplex || _('unknown'))
+					: _('Port %s: no link').format(name)
+			}, [
+				E('span', { class: 'unifi-port-glyph' }, [icon('ethernet', 'unifi-port-svg'), E('i')]),
+				E('span', { class: 'unifi-port-copy' }, [
+					E('strong', {}, name),
+					E('small', {}, carrier ? formatSpeed(speed) : _('Disconnected'))
+				]),
+				E('span', { class: 'unifi-port-role' }, role.toUpperCase())
+			]));
+		});
+	},
+
+	enhanceLuCIViews() {
+		const main = document.querySelector('#maincontent');
+		if (!main) return;
+		const route = L.env.requestpath.join('/').toLowerCase();
+		if (/(bandwidth|load|wireless|connections)$/.test(route))
+			document.body.classList.add('unifi-realtime-page');
+
+		let scheduled = false;
+		const apply = () => {
+			scheduled = false;
+			main.querySelectorAll('.table').forEach((table) => table.classList.add('unifi-data-table'));
+			main.querySelectorAll('.includes > .cbi-section').forEach((section) => {
+				section.classList.add('unifi-overview-section');
+				if (section.querySelector('.ifacebox img[src*="port_"]')) section.classList.add('unifi-port-status-section');
+				if (section.querySelector('.network-status-table')) section.classList.add('unifi-network-status-section');
+				if (section.querySelector('.cbi-progressbar')) section.classList.add('unifi-metric-section');
+			});
+			main.querySelectorAll('.ifacebox img[src*="port_"]').forEach((image) => image.closest('.ifacebox')?.classList.add('unifi-luci-port'));
+			main.querySelectorAll('.network-status-table .ifacebox').forEach((box) => box.classList.add('unifi-uplink-card'));
+			main.querySelectorAll('.cbi-section svg').forEach((svg) => {
+				if (svg.querySelector('#rx, #tx, polyline')) svg.parentElement?.classList.add('unifi-stock-chart');
+			});
+		};
+		const schedule = () => {
+			if (scheduled) return;
+			scheduled = true;
+			window.requestAnimationFrame(apply);
+		};
+		apply();
+		new MutationObserver(schedule).observe(main, { childList: true, subtree: true });
 	},
 
 	buildCommandMenu() {
