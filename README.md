@@ -11,10 +11,11 @@ Ubiquiti Inc. and does not ship Ubiquiti trademarks or proprietary assets.
 
 ## Status
 
-Version 0.3.1 replaces the imported Bootstrap styles with an original, standalone
-visual system. Buttons, forms, tables, dropdowns, dialogs, logs and firewall
-surfaces now share comfortable spacing, contemporary light/dark colors and
-restrained motion. Native LuCI widgets still own their rendering and behavior.
+Version 0.3.2 refines the standalone visual system with tighter forms, a smaller
+console frame and more efficient tables. Opaque surfaces, simpler icons, readable
+labels and quieter motion replace the previous glass/shadow effects. Desktop
+controls are compact; mobile controls retain larger targets. Native LuCI widgets
+still own their rendering and behavior; no upstream theme CSS is imported.
 See [the design document](docs/DESIGN.md) and
 [the interaction questionnaire](docs/INTERACTIONS.md) for the compatibility
 decisions behind the theme.

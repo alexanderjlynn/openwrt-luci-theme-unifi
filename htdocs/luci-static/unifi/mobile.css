@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: Apache-2.0 — original responsive console layout */
 @media (max-width: 900px) {
- :root { --unifi-topbar-height: 56px; }
+ :root { --unifi-topbar-height: 56px; --unifi-card-padding: 16px; --unifi-control-height: 40px; }
  #unifi-topbar { padding: 0 12px; }
  #unifi-mobile-toggle { display: inline-flex; flex-direction: column; gap: 0; margin-right: 8px; }
  .unifi-product { flex-basis: auto; }
@@ -15,24 +15,25 @@
  #unifi-sidebar { z-index: 2000; width: min(308px, calc(100vw - 44px)); transform: translateX(-102%); transition: transform .22s cubic-bezier(.2, .8, .2, 1); box-shadow: 16px 0 48px rgba(0, 0, 0, .14); }
  body.unifi-nav-open { overflow: hidden; }
  body.unifi-nav-open #unifi-sidebar { transform: none; }
- #unifi-scrim:not([hidden]) { position: fixed; z-index: 1900; inset: var(--unifi-topbar-height) 0 0; background: rgba(8, 14, 22, .4); backdrop-filter: blur(2px); }
- #maincontent.container { width: 100%; margin: 0; padding: 24px 20px 32px; }
+ #unifi-scrim:not([hidden]) { position: fixed; z-index: 1900; inset: var(--unifi-topbar-height) 0 0; background: rgba(8, 14, 22, .4); }
+ #maincontent.container { width: 100%; margin: 0; padding: 20px 18px 28px; }
  .unifi-page-submenu { display: none; }
+ .unifi-nav-children > li > a { min-height: 40px; }
+ .unifi-page-submenu button { min-height: 40px; }
  .unifi-kpi-grid, #unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
  .unifi-throughput-card { grid-column: 1 / -1; }
  body.unifi-overview-page .includes { grid-template-columns: 1fr; }
  body.unifi-overview-page .includes > .cbi-section { grid-column: 1; }
- #content_syslog { padding: 20px; }
  #syslog { min-height: 360px; padding: 20px; }
  .unifi-footer { justify-content: flex-start; }
 }
 @media (max-width: 600px) {
- #maincontent.container { padding: 24px 16px; }
+ #maincontent.container { padding: 20px 16px; }
  #indicators { display: none; }
  .unifi-kpi-grid, #unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: 1fr; }
- .unifi-kpi-card { min-height: 140px; }
- .unifi-throughput-card { grid-column: 1; min-height: 170px; }
- .unifi-throughput-graph { width: 39%; }
+ .unifi-kpi-card { min-height: 96px; }
+ .unifi-throughput-card { grid-column: 1; min-height: 138px; }
+ .unifi-throughput-graph { width: 36%; height: 52px; bottom: 24px; }
  .unifi-throughput-values { gap: 12px; }
  .unifi-telemetry-heading h1 { font-size: 23px; }
  .unifi-health-pill { display: none; }
@@ -45,7 +46,12 @@
  .unifi-port-copy strong { font-size: 12px; }
  .unifi-port-copy small { font-size: 10px; }
  #content_syslog select { min-width: 0; max-width: 100%; }
- #syslog { min-height: 320px; padding: 18px; }
+ #syslog { min-height: 320px; padding: 16px; }
  .unifi-login-card { padding: 28px; }
  .unifi-command { padding-top: 6vh; }
+}
+@media (max-width: 380px) {
+ .unifi-throughput-card { min-height: 172px; }
+ .unifi-throughput-graph { width: calc(100% - 32px); height: 44px; bottom: 25px; }
+ .unifi-throughput-caption { bottom: 8px; }
 }

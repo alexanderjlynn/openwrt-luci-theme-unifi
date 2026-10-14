@@ -161,13 +161,18 @@ try {
   });
   for (const dark of [false, true]) {
     await page.evaluate(dark => { if (dark) document.documentElement.setAttribute('data-darkmode', 'true'); else document.documentElement.removeAttribute('data-darkmode'); }, dark);
-    for (const width of [1440, 390]) {
+    for (const width of [1440, 390, 320]) {
       await page.setViewportSize({ width, height: 1100 });
       await page.waitForTimeout(300); // finish the responsive drawer transition
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `No overflow at ${width}, dark=${dark}`);
       if (width === 390) assert(await page.locator('#unifi-sidebar').evaluate(node => node.getBoundingClientRect().right <= 0), 'Closed mobile drawer is fully offscreen');
       assert.equal(await page.locator('.unifi-port-panel > header').evaluate(node => getComputedStyle(node).backgroundImage), 'none', 'No inherited Bootstrap header gradient');
-      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v030-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
+      assert(await page.locator('.unifi-throughput-card').evaluate(node => {
+        const values = node.querySelector('.unifi-throughput-values').getBoundingClientRect();
+        const graph = node.querySelector('.unifi-throughput-graph').getBoundingClientRect();
+        return values.right <= graph.left || values.bottom <= graph.top;
+      }), `Throughput labels and graph do not overlap at ${width}`);
+      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v032-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
     }
   }
   assert.deepEqual(errors, []);
@@ -215,10 +220,11 @@ try {
         assert.equal(await page.locator('.unifi-tab-source').isVisible(), true);
         await page.locator('.unifi-tab-source a').filter({ hasText: 'Time Synchronization' }).click();
         const bounds = await page.locator('.unifi-tab-source > li').first().boundingBox();
-        assert(bounds.height >= 42, 'Native tabs have room for their text');
+        assert(bounds.height >= 40, 'Native tabs retain comfortable targets');
+        assert(await page.locator('.unifi-tab-source a').evaluateAll(nodes => nodes.every(node => node.scrollHeight <= node.clientHeight)), 'Native tab text is not clipped');
       }
       assert(await page.locator('[data-menu="system"] .unifi-nav-root').evaluate(node => node.scrollHeight <= node.clientHeight), 'Main category text is not clipped');
-      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v030-settings-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
+      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v032-settings-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
     }
   }
   assert.deepEqual(errors, []);
@@ -285,13 +291,34 @@ try {
         const buttons = [...document.querySelectorAll('#view button, #view .cbi-button')].map(node => ({ height: node.getBoundingClientRect().height, fits: node.scrollHeight <= node.clientHeight, padding: parseFloat(getComputedStyle(node).paddingLeft) }));
         return { card: parseFloat(style('#firewall-card').paddingLeft), cell: parseFloat(style('#zone-card .td').paddingLeft), buttons };
       });
-      assert(spacing.card >= 20 && spacing.cell >= 8, 'Card and cell text has interior gutters');
-      assert(spacing.buttons.every(button => button.height >= 40 && button.fits), 'Native action buttons have comfortable height and unclipped text');
+      assert(spacing.card >= 16 && spacing.card <= 20 && spacing.cell >= 8, 'Compact cards retain real interior gutters');
+      assert(spacing.buttons.every(button => button.height >= (width <= 900 ? 40 : 36) && button.fits), 'Desktop controls are compact; mobile controls retain comfortable targets and unclipped text');
+      if (width === 1440) {
+        const density = await page.evaluate(() => ({
+          formHeight: document.querySelector('#firewall-card').getBoundingClientRect().height,
+          rowPadding: getComputedStyle(document.querySelector('#firewall-card .cbi-value')).paddingTop,
+          inputHeight: document.querySelector('#addresses .add-item input').getBoundingClientRect().height,
+          topbar: document.querySelector('#unifi-topbar').getBoundingClientRect().height,
+          sidebar: document.querySelector('#unifi-sidebar').getBoundingClientRect().width,
+          blur: getComputedStyle(document.querySelector('#unifi-topbar')).backdropFilter,
+          shadow: getComputedStyle(document.querySelector('.unifi-nav-icon-frame')).boxShadow,
+          font: getComputedStyle(document.body).fontFamily
+        }));
+        assert(density.formHeight < 390, 'Three-field native form is usefully denser than the previous 452px card');
+        assert.equal(density.rowPadding, '10px');
+        assert(density.inputHeight >= 36 && density.inputHeight < 40);
+        assert.equal(density.topbar, 56);
+        assert.equal(density.sidebar, 256);
+        assert.equal(density.blur, 'none');
+        assert.equal(density.shadow, 'none');
+        assert.match(density.font, /Inter/);
+        console.log('Compact layout:', { dark, ...density });
+      }
       assert(await page.locator('#addresses .add-item').evaluate(node => {
         const [input, button] = [...node.children].map(child => child.getBoundingClientRect());
         return Math.abs(input.y + input.height / 2 - button.y - button.height / 2) < 1;
       }), 'Dynamic-list add input and action stay center-aligned on one row');
-      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v030-firewall-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
+      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v032-firewall-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
     }
   }
   await page.evaluate(() => fixture.ui.showModal('Apply configuration', [E('p', {}, 'Native LuCI confirmation dialog.'), E('div', { class: 'button-row' }, E('button', { class: 'btn', click: () => fixture.ui.hideModal() }, 'Cancel'))]));
@@ -308,13 +335,18 @@ try {
       await page.setViewportSize({ width, height: 1100 });
       await page.waitForTimeout(300);
       const log = await page.locator('#syslog').evaluate(node => ({ padding: parseFloat(getComputedStyle(node).paddingLeft), line: parseFloat(getComputedStyle(node).lineHeight), size: parseFloat(getComputedStyle(node).fontSize), rows: node.value.split('\n').length }));
-      assert(log.padding >= 18 && log.line >= log.size * 1.8 && log.rows === 24, 'Log text retains data and generous inner spacing');
+      assert(log.padding >= 16 && log.line >= log.size * 1.6 && log.line <= log.size * 1.7 && log.rows === 24, 'Log text retains data, real gutters and an efficient readable line height');
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `System log does not overflow at ${width}`);
-      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v030-log-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
+      await page.screenshot({ path: path.join(os.tmpdir(), `unifi-v032-log-${width}-${dark ? 'dark' : 'light'}.png`), fullPage: true });
     }
   }
   assert.deepEqual(errors, []);
   assert.deepEqual(upstreamStyles, [], 'No upstream stylesheet request: original theme CSS only');
+  const touch = await browser.newPage({ viewport: { width: 1440, height: 1000 }, hasTouch: true });
+  await touch.goto(origin);
+  assert(await touch.evaluate(() => matchMedia('(pointer: coarse)').matches));
+  assert.equal(await touch.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--unifi-control-height').trim()), '40px', 'Wide touch screens retain larger controls too');
+  await touch.close();
   console.log('PASS: real LuCI Dropdown, multi-select, DynamicList add/remove, ComboButton, modal open/Escape, optional clearing; padded firewall/log surfaces and action buttons; no Bootstrap requests.');
   console.log('PASS: vertical settings navigation delegates to real LuCI switchTab(); unsaved inputs, native pane adjacency, hidden tabs and validation badges preserved; 1440/1024/768/390/320 light/dark layouts.');
   console.log('PASS: actual LuCI DOM factory, SVG icons, live graph samples, native NIC metadata, chart controls, click/hover/keyboard menus, RPC recovery, desktop/mobile light/dark.');

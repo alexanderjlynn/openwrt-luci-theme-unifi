@@ -1,6 +1,6 @@
 # LuCI Network Theme — Design Document
 
-Status: v0.3.1 original standalone CSS and native-widget regression coverage
+Status: v0.3.2 compact density, quieter surfaces and native-widget coverage
 
 Target: OpenWrt 25.12.5 / current LuCI
 
@@ -152,18 +152,27 @@ their own data collection; the theme changes their presentation only.
 
 - Font: Inter Variable, served locally, with native UI font fallbacks.
 - Accent: `#006fff` light / `#4b9cff` dark.
-- Surfaces: white cards on `#f6f7f9`; dark surfaces on neutral `#101316`.
+- Surfaces: opaque white cards on `#f7f8fa`; dark cards on neutral `#14171c`.
 - Radius: 6 px controls, 10 px panels, 12–14 px elevated dialogs.
-- Borders: low-contrast structure replaces heavy shadows.
-- Type: 14 px base; 11–13.5 px navigation; 26 px page headings.
-- Spacing: 24 px card gutters (20 px mobile), 18 px form rows, 32 px label/control
-  gaps, 40 px minimum action buttons and 42 px inputs; no fixed text heights.
-- Logs: padded, scrollable monospace text with a 1.9 line height. Filtering and
+- Borders: subtle dividers, unboxed navigation icons and no card shadows.
+- Type: 14 px base; 11–13 px navigation; 24 px page headings. Small telemetry
+  labels use readable sentence case instead of tiny tracked capitals.
+- Spacing: 20 px card gutters (16 px mobile), 10 px form rows, 24 px label/control
+  gaps, 36 px minimum desktop controls and 40 px mobile/coarse-pointer controls;
+  no fixed text heights. The frame is 56 px high with a 256 px desktop sidebar.
+- Logs: padded, scrollable monospace text with a 1.65 line height. Filtering and
   the complete native log remain available.
 - Icons: original local SVG symbol set with 24 px view boxes and 1.7 px strokes.
 
 Tokens live at the top of `cascade.css`. Components consume tokens instead of
 literal colors wherever browser support permits.
+
+Density is deliberately reduced through whitespace, not smaller body text or
+hidden data. Shared card-padding, section-gap and control-height tokens prevent
+individual widgets drifting apart. Native focus and dropdown transitions remain;
+continuous decorative pulsing, blurred glass and hover lifts are removed. This
+reduces visual noise and compositing work without changing polling frequency,
+native view lifecycles or the information shown.
 
 ## Rendering and navigation safeguards
 

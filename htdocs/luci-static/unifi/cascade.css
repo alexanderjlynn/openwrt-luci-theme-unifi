@@ -7,14 +7,14 @@
 	font-weight: 100 900;
 	font-display: swap;
 	src: url("fonts/InterVariable.woff2") format("woff2");}
-:root { --unifi-blue: #006fff; --unifi-blue-hover: #005ee0; --unifi-blue-soft: #eaf3ff; --unifi-cyan: #00a6d7; --unifi-violet: #7857e6; --unifi-green: #18a558; --unifi-amber: #d97706; --unifi-red: #e5484d; --unifi-bg: #f6f7f9; --unifi-surface: #fff; --unifi-surface-raised: #fff; --unifi-surface-hover: #f4f6f8; --unifi-sidebar: #fff; --unifi-line: #e7eaee; --unifi-line-strong: #ccd3dc; --unifi-text: #202a36; --unifi-text-2: #4e5c6c; --unifi-text-3: #738091; --unifi-shadow-sm: 0 1px 2px rgba(15, 23, 42, .05); --unifi-shadow-md: 0 8px 24px rgba(15, 23, 42, .10), 0 2px 5px rgba(15, 23, 42, .05); --unifi-radius-sm: 5px; --unifi-radius: 8px; --unifi-radius-lg: 12px; --unifi-topbar-height: 64px; --unifi-sidebar-width: 288px; --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; --primary-color-high: var(--unifi-blue); --primary-color-medium: var(--unifi-blue-hover); --primary-color-low: #004fbf; --background-color-high: var(--unifi-surface); --background-color-medium: var(--unifi-bg); --background-color-low: #eef0f3; --text-color-highest: var(--unifi-text); --text-color-high: var(--unifi-text-2); --text-color-medium: var(--unifi-text-3); --border-color-high: var(--unifi-line-strong); --border-color-medium: var(--unifi-line); --border-color-low: #edf0f2; color-scheme: light; --unifi-on-blue: #fff; --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace; --on-primary-color: #fff; --error-color-high: var(--unifi-red); --error-color-medium: var(--unifi-red); --error-color-low: var(--unifi-red); --error-color-high-rgb: 229, 72, 77; --on-error-color: #fff; --success-color-high: var(--unifi-green); --success-color-medium: var(--unifi-green); --success-color-low: var(--unifi-green); --success-color-high-rgb: 24, 165, 88; --on-success-color: #fff; --warn-color-high: var(--unifi-amber); --on-warn-color: var(--unifi-text); --disabled-opacity: .48; --background-color-high-hsl: 0, 0%, 100%; --border-color-high-hsl: 215, 18%, 83%; --border-color-low-hsl: 215, 18%, 92%; --text-color-low: var(--unifi-text-3); }
-:root[data-darkmode="true"] { --unifi-blue: #4b9cff; --unifi-blue-hover: #72b1ff; --unifi-blue-soft: rgba(52, 137, 255, .17); --unifi-cyan: #36c6ed; --unifi-violet: #a38bff; --unifi-green: #42c77a; --unifi-amber: #f0ad4e; --unifi-red: #ff6b70; --unifi-bg: #101316; --unifi-surface: #191d22; --unifi-surface-raised: #1b2025; --unifi-surface-hover: #22282e; --unifi-sidebar: #161a1f; --unifi-line: #2b323b; --unifi-line-strong: #414b58; --unifi-text: #ecf0f5; --unifi-text-2: #bac4d0; --unifi-text-3: #8e9aaa; --unifi-shadow-sm: 0 1px 2px rgba(0, 0, 0, .3); --unifi-shadow-md: 0 10px 30px rgba(0, 0, 0, .4); --background-color-high: var(--unifi-surface); --background-color-medium: var(--unifi-bg); --background-color-low: #0d1115; --text-color-highest: var(--unifi-text); --text-color-high: var(--unifi-text-2); --text-color-medium: var(--unifi-text-3); --border-color-high: var(--unifi-line-strong); --border-color-medium: var(--unifi-line); --border-color-low: #20272e; color-scheme: dark; --unifi-on-blue: #091629; --background-color-high-hsl: 215, 16%, 12%; --border-color-high-hsl: 215, 15%, 30%; }
-:root[data-darkmode="true"] #unifi-topbar { background: rgba(17, 21, 25, .94); }
-html { min-height: 100%; background: var(--unifi-bg); font-size: 14px; -webkit-font-smoothing: antialiased; }
-body { min-height: 100vh; margin: 0; padding: 0; background: var(--unifi-bg); color: var(--unifi-text); font-family: var(--font-sans); font-size: 14px; line-height: 1.65; }
+:root { --unifi-blue: #006fff; --unifi-blue-hover: #005ee0; --unifi-blue-soft: #eaf3ff; --unifi-cyan: #00a6d7; --unifi-violet: #7857e6; --unifi-green: #18a558; --unifi-amber: #d97706; --unifi-red: #e5484d; --unifi-bg: #f7f8fa; --unifi-surface: #fff; --unifi-surface-raised: #fff; --unifi-surface-hover: #f4f6f8; --unifi-sidebar: #fff; --unifi-line: #e6e8ec; --unifi-line-strong: #d5d9e0; --unifi-text: #202a36; --unifi-text-2: #4e5c6c; --unifi-text-3: #667387; --unifi-shadow-sm: none; --unifi-shadow-md: 0 8px 24px rgba(15, 23, 42, .10), 0 2px 5px rgba(15, 23, 42, .05); --unifi-radius-sm: 5px; --unifi-radius: 8px; --unifi-radius-lg: 12px; --unifi-topbar-height: 56px; --unifi-sidebar-width: 256px; --unifi-card-padding: 20px; --unifi-section-gap: 16px; --unifi-control-height: 36px; --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; --primary-color-high: var(--unifi-blue); --primary-color-medium: var(--unifi-blue-hover); --primary-color-low: #004fbf; --background-color-high: var(--unifi-surface); --background-color-medium: var(--unifi-bg); --background-color-low: #eef0f3; --text-color-highest: var(--unifi-text); --text-color-high: var(--unifi-text-2); --text-color-medium: var(--unifi-text-3); --border-color-high: var(--unifi-line-strong); --border-color-medium: var(--unifi-line); --border-color-low: #edf0f2; color-scheme: light; --unifi-on-blue: #fff; --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace; --on-primary-color: #fff; --error-color-high: var(--unifi-red); --error-color-medium: var(--unifi-red); --error-color-low: var(--unifi-red); --error-color-high-rgb: 229, 72, 77; --on-error-color: #fff; --success-color-high: var(--unifi-green); --success-color-medium: var(--unifi-green); --success-color-low: var(--unifi-green); --success-color-high-rgb: 24, 165, 88; --on-success-color: #fff; --warn-color-high: var(--unifi-amber); --on-warn-color: var(--unifi-text); --disabled-opacity: .48; --background-color-high-hsl: 0, 0%, 100%; --border-color-high-hsl: 215, 18%, 83%; --border-color-low-hsl: 215, 18%, 92%; --text-color-low: var(--unifi-text-3); }
+:root[data-darkmode="true"] { --unifi-blue: #4b9cff; --unifi-blue-hover: #72b1ff; --unifi-blue-soft: rgba(52, 137, 255, .17); --unifi-cyan: #36c6ed; --unifi-violet: #a38bff; --unifi-green: #42c77a; --unifi-amber: #f0ad4e; --unifi-red: #ff6b70; --unifi-bg: #14171c; --unifi-surface: #1b1f25; --unifi-surface-raised: #1b2025; --unifi-surface-hover: #22282e; --unifi-sidebar: #181c22; --unifi-line: #2c323b; --unifi-line-strong: #414b58; --unifi-text: #ecf0f5; --unifi-text-2: #bac4d0; --unifi-text-3: #8e9aaa; --unifi-shadow-sm: none; --unifi-shadow-md: 0 10px 30px rgba(0, 0, 0, .4); --background-color-high: var(--unifi-surface); --background-color-medium: var(--unifi-bg); --background-color-low: #0d1115; --text-color-highest: var(--unifi-text); --text-color-high: var(--unifi-text-2); --text-color-medium: var(--unifi-text-3); --border-color-high: var(--unifi-line-strong); --border-color-medium: var(--unifi-line); --border-color-low: #20272e; color-scheme: dark; --unifi-on-blue: #091629; --background-color-high-hsl: 215, 16%, 12%; --border-color-high-hsl: 215, 15%, 30%; }
+@media (pointer: coarse) { :root { --unifi-control-height: 40px; } }
+html { min-height: 100%; background: var(--unifi-bg); font-size: 14px; }
+body { min-height: 100vh; margin: 0; padding: 0; background: var(--unifi-bg); color: var(--unifi-text); font-family: var(--font-sans); font-size: 14px; line-height: 1.5; }
 .unifi-skip { position: fixed; top: 8px; left: 50%; z-index: 100000; padding: 8px 14px; transform: translate(-50%, -80px); border-radius: var(--unifi-radius); background: var(--unifi-surface); box-shadow: var(--unifi-shadow-md); }
 .unifi-skip:focus { transform: translate(-50%, 0); }
-#unifi-topbar { position: fixed; z-index: 1001; top: 0; right: 0; left: 0; display: flex; align-items: center; height: var(--unifi-topbar-height); min-height: 0; margin: 0; padding: 0 18px; border-bottom: 1px solid var(--unifi-line); background: color-mix(in srgb, var(--unifi-surface) 94%, transparent); color: var(--unifi-text); box-shadow: none; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+#unifi-topbar { position: fixed; z-index: 1001; top: 0; right: 0; left: 0; display: flex; align-items: center; height: var(--unifi-topbar-height); min-height: 0; margin: 0; padding: 0 18px; border-bottom: 1px solid var(--unifi-line); background: var(--unifi-surface); color: var(--unifi-text); box-shadow: none; }
 .unifi-product { display: flex; align-items: center; flex: 0 0 calc(var(--unifi-sidebar-width) - 16px); gap: 11px; color: var(--unifi-text); font-size: 15px; font-weight: 650; letter-spacing: -.01em; text-decoration: none; flex-basis: calc(var(--unifi-sidebar-width) - 18px); }
 .unifi-product:hover { color: var(--unifi-text); text-decoration: none; }
 .unifi-product img { width: 34px; height: 34px; }
@@ -39,16 +39,16 @@ kbd { min-width: 20px; padding: 1px 5px; border: 1px solid var(--unifi-line-stro
 #unifi-mobile-toggle { display: none; margin-right: 8px; }
 #unifi-mobile-toggle span { display: block; width: 16px; height: 1.5px; margin: 2px 0; border-radius: 2px; background: currentColor; }
 #unifi-layout { min-height: 100vh; padding-top: var(--unifi-topbar-height); }
-#unifi-sidebar { position: fixed; z-index: 900; top: var(--unifi-topbar-height); bottom: 0; left: 0; display: flex; width: var(--unifi-sidebar-width); flex-direction: column; padding: 16px 10px 12px; overflow-x: hidden; overflow-y: auto; border-right: 1px solid var(--unifi-line); background: color-mix(in srgb, var(--unifi-sidebar) 97%, var(--unifi-bg)); scrollbar-width: thin; scrollbar-color: var(--unifi-line-strong) transparent; }
+#unifi-sidebar { position: fixed; z-index: 900; top: var(--unifi-topbar-height); bottom: 0; left: 0; display: flex; width: var(--unifi-sidebar-width); flex-direction: column; padding: 12px 8px; overflow-x: hidden; overflow-y: auto; border-right: 1px solid var(--unifi-line); background: var(--unifi-sidebar); scrollbar-width: thin; scrollbar-color: var(--unifi-line-strong) transparent; }
 #mainmenu { flex: 1 0 auto; }
-.unifi-nav-heading, .unifi-mode-label { display: block; padding: 5px 10px 7px; color: var(--unifi-text-3); font-size: 10px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
-.unifi-nav-section { margin: 2px 0; --unifi-nav-accent: var(--unifi-text-3); }
+.unifi-nav-heading, .unifi-mode-label { display: block; padding: 5px 10px 7px; color: var(--unifi-text-3); font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.unifi-nav-section { margin: 2px 0; --unifi-nav-accent: var(--unifi-blue); }
 .unifi-nav-head { position: relative; display: flex; align-items: center; }
 .unifi-nav-root, .unifi-nav-children a, #modemenu a { position: relative; display: flex; min-width: 0; align-items: center; gap: 10px; border-radius: 6px; color: var(--unifi-text-2); font-size: 13px; font-weight: 480; text-decoration: none; transition: color .14s ease, background-color .14s ease, transform .14s ease; }
-.unifi-nav-root { width: 100%; height: auto; padding: 12px 38px 12px 10px; min-height: 64px; gap: 11px; border-radius: 8px; border: 0; background: transparent; justify-content: flex-start; text-align: left; }
+.unifi-nav-root { width: 100%; height: auto; padding: 8px 34px 8px 10px; min-height: 52px; gap: 10px; border-radius: 8px; border: 0; background: transparent; justify-content: flex-start; text-align: left; }
 .unifi-nav-root:hover, .unifi-nav-children a:hover, #modemenu a:hover { background: var(--unifi-surface-hover); color: var(--unifi-text); text-decoration: none; }
 .unifi-nav-root:active, .unifi-nav-children a:active { transform: scale(.985); }
-.unifi-nav-section.active > .unifi-nav-head .unifi-nav-root { background: color-mix(in srgb, var(--unifi-nav-accent) 9%, var(--unifi-surface)); color: var(--unifi-text); font-weight: 600; }
+.unifi-nav-section.active > .unifi-nav-head .unifi-nav-root { background: var(--unifi-blue-soft); color: var(--unifi-blue); font-weight: 600; }
 .unifi-nav-icon, .unifi-nav-child-icon, .unifi-command-icon { width: 18px; height: 18px; flex: 0 0 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .unifi-nav-child-icon { width: 15px; height: 15px; flex-basis: 16px; stroke-width: 1.6; }
 .unifi-nav-expander { position: absolute; right: 7px; display: grid; width: 28px; height: 32px; place-items: center; border: 0; border-radius: 5px; background: transparent; color: var(--unifi-text-3); cursor: pointer; transition: transform .18s ease, background-color .18s ease; min-height: 32px; padding: 0; flex: 0 0 28px; }
@@ -64,17 +64,17 @@ kbd { min-width: 20px; padding: 1px 5px; border: 1px solid var(--unifi-line-stro
 #modemenu ul { margin: 0; padding: 0; list-style: none; }
 #modemenu li { padding: 0; list-style: none; }
 #modemenu a { min-height: 34px; padding: 7px 10px; font-size: 12px; }
-.unifi-device-meta { display: flex; align-items: center; gap: 9px; margin-top: 12px; padding: 10px 8px; border-top: 1px solid var(--unifi-line); color: var(--unifi-text-2); margin: 12px 2px 0; border: 1px solid var(--unifi-line); border-radius: 9px; background: var(--unifi-surface); box-shadow: var(--unifi-shadow-sm); }
+.unifi-device-meta { display: flex; align-items: center; gap: 9px; margin-top: 12px; padding: 10px 8px; border-top: 1px solid var(--unifi-line); color: var(--unifi-text-2); margin: 12px 2px 0; border: 0; border-radius: 9px; background: transparent; box-shadow: var(--unifi-shadow-sm); }
 .unifi-device-meta > span:nth-child(2) { min-width: 0; }
 .unifi-device-meta strong, .unifi-device-meta small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .unifi-device-meta strong { color: var(--unifi-text); font-size: 11px; font-weight: 600; }
-.unifi-device-meta small { margin-top: 2px; color: var(--unifi-text-3); font-size: 9px; }
+.unifi-device-meta small { margin-top: 2px; color: var(--unifi-text-3); font-size: 11px; }
 .unifi-status-dot { width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%; background: var(--unifi-green); box-shadow: 0 0 0 3px color-mix(in srgb, var(--unifi-green) 15%, transparent); }
-#maincontent.container { width: auto; max-width: 1800px; min-height: calc(100vh - var(--unifi-topbar-height)); margin: 0 0 0 var(--unifi-sidebar-width); padding: 32px clamp(24px, 3vw, 48px) 40px; background: transparent; }
+#maincontent.container { width: auto; max-width: 1800px; min-height: calc(100vh - var(--unifi-topbar-height)); margin: 0 0 0 var(--unifi-sidebar-width); padding: 24px clamp(20px, 2vw, 32px) 32px; background: transparent; }
 #maincontent > h2:first-of-type { margin: 0 0 5px; color: var(--unifi-text); font-size: 22px; font-weight: 620; letter-spacing: -.025em; }
 body.modal-overlay-active { overflow: hidden; }
 .unifi-command[hidden] { display: none; }
-.unifi-command { position: fixed; z-index: 10000; inset: 0; display: flex; align-items: flex-start; justify-content: center; padding: 12vh 18px 40px; background: rgba(10, 16, 22, .48); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.unifi-command { position: fixed; z-index: 10000; inset: 0; display: flex; align-items: flex-start; justify-content: center; padding: 12vh 18px 40px; background: rgba(10, 16, 22, .48); }
 .unifi-command-panel { width: min(600px, 100%); overflow: hidden; border: 1px solid var(--unifi-line-strong); border-radius: var(--unifi-radius-lg); background: var(--unifi-surface-raised); box-shadow: 0 24px 70px rgba(0, 0, 0, .25); animation: unifi-command-in .16s ease-out both; }
 .unifi-command-panel > label { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--unifi-line); color: var(--unifi-text-3); }
 .unifi-command-panel input[type="search"] { width: 100%; min-height: 28px; padding: 0; border: 0; background: transparent; box-shadow: none; color: var(--unifi-text); font-size: 15px; }
@@ -92,30 +92,27 @@ body.modal-overlay-active { overflow: hidden; }
 .unifi-command-panel > p { margin: 0; padding: 8px 14px; border-top: 1px solid var(--unifi-line); color: var(--unifi-text-3); font-size: 10px; }
 body.unifi-command-open { overflow: hidden; }
 body.unifi-blank { display: block; padding: 0; background: var(--unifi-bg); }
-body.unifi-blank::before, body.unifi-blank::after { position: fixed; z-index: 0; width: 420px; height: 420px; border-radius: 50%; background: color-mix(in srgb, var(--unifi-blue) 8%, transparent); filter: blur(30px); content: ""; }
-body.unifi-blank::before { top: -220px; right: -110px; }
-body.unifi-blank::after { bottom: -260px; left: -130px; }
 .unifi-login-page { position: relative; z-index: 1; display: grid; min-height: 100vh; padding: 28px; place-items: center; }
-.unifi-login-card { width: min(420px, 100%); padding: 30px; transform: translateY(8px); border: 1px solid var(--unifi-line); border-radius: 14px; background: color-mix(in srgb, var(--unifi-surface) 96%, transparent); box-shadow: var(--unifi-shadow-md); opacity: 0; transition: transform .3s ease, opacity .3s ease; backdrop-filter: blur(14px); }
+.unifi-login-card { width: min(420px, 100%); padding: 30px; transform: translateY(8px); border: 1px solid var(--unifi-line); border-radius: 14px; background: var(--unifi-surface); box-shadow: var(--unifi-shadow-md); opacity: 0; transition: transform .3s ease, opacity .3s ease; }
 .unifi-login-card.is-ready { transform: translateY(0); opacity: 1; }
 .unifi-login-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; color: var(--unifi-text); font-size: 15px; font-weight: 650; }
 .unifi-login-brand img { width: 34px; height: 34px; }
 .unifi-login-copy h1 { margin: 0; color: var(--unifi-text); font-size: 24px; font-weight: 630; letter-spacing: -.03em; }
 .unifi-login-copy p { margin: 6px 0 23px; color: var(--unifi-text-2); }
 .unifi-login-card .alert-message { margin: 2px 0 14px; }
-.unifi-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--unifi-line); color: var(--unifi-text-3); font-size: 10px; flex-wrap: wrap; }
+.unifi-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--unifi-line); color: var(--unifi-text-3); font-size: 11px; flex-wrap: wrap; }
 @keyframes unifi-modal-in {from { transform: translateY(8px) scale(.99); opacity: 0; }}
 @keyframes unifi-command-in {from { transform: translateY(-8px) scale(.99); opacity: 0; }}
 @media (min-width: 1400px) {
-#maincontent.container { padding-right: 42px; padding-left: 42px; }
+#maincontent.container { padding-right: 32px; padding-left: 32px; }
 }
 .unifi-product > span { display: flex; flex-direction: column; line-height: 1.5; }
 .unifi-product strong { color: var(--unifi-text); font-size: 14px; font-weight: 680; letter-spacing: -.02em; }
-.unifi-product small { margin-top: 4px; color: var(--unifi-text-3); font-size: 9px; font-weight: 620; letter-spacing: .075em; text-transform: uppercase; }
+.unifi-product small { margin-top: 1px; color: var(--unifi-text-3); font-size: 10px; font-weight: 620; letter-spacing: 0; text-transform: none; }
 .unifi-site-pill { display: flex; min-width: 0; align-items: center; gap: 8px; }
 .unifi-site-pill > svg { width: 20px; height: 20px; flex: 0 0 20px; fill: none; stroke: var(--unifi-text-3); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .unifi-site-pill > span { display: flex; min-width: 0; flex-direction: column; line-height: 1.5; }
-.unifi-site-pill small { color: var(--unifi-text-3); font-size: 9px; font-weight: 620; letter-spacing: .06em; text-transform: uppercase; }
+.unifi-site-pill small { color: var(--unifi-text-3); font-size: 10px; font-weight: 500; letter-spacing: 0; text-transform: none; }
 .unifi-site-pill strong { max-width: 180px; margin-top: 3px; overflow: hidden; color: var(--unifi-text-2); font-size: 11px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .unifi-context-divider { width: 1px; height: 24px; background: var(--unifi-line); }
 .unifi-page-context { max-width: min(30vw, 420px); overflow: hidden; font-size: 14px; font-weight: 630; text-overflow: ellipsis; white-space: nowrap; }
@@ -125,25 +122,25 @@ body.unifi-blank::after { bottom: -260px; left: -130px; }
 .unifi-health-link i { position: absolute; top: 7px; right: 6px; width: 6px; height: 6px; border: 1.5px solid var(--unifi-surface); border-radius: 50%; background: var(--unifi-green); }
 .unifi-theme-toggle[data-mode="light"] { color: var(--unifi-amber); }
 .unifi-nav-heading { display: flex; align-items: center; justify-content: space-between; padding: 3px 10px 10px; }
-.unifi-nav-heading small { padding: 2px 5px; border: 1px solid var(--unifi-line); border-radius: 4px; color: var(--unifi-text-3); font-size: 8px; letter-spacing: .04em; }
+.unifi-nav-heading small { padding: 2px 5px; border: 0; border-radius: 4px; color: var(--unifi-text-3); font-size: 10px; letter-spacing: 0; }
 .unifi-nav-section[data-accent="blue"] { --unifi-nav-accent: var(--unifi-blue); }
-.unifi-nav-section[data-accent="cyan"] { --unifi-nav-accent: var(--unifi-cyan); }
-.unifi-nav-section[data-accent="violet"] { --unifi-nav-accent: var(--unifi-violet); }
-.unifi-nav-section[data-accent="green"] { --unifi-nav-accent: var(--unifi-green); }
-.unifi-nav-section[data-accent="red"] { --unifi-nav-accent: var(--unifi-red); }
+.unifi-nav-section[data-accent="cyan"] { --unifi-nav-accent: var(--unifi-blue); }
+.unifi-nav-section[data-accent="violet"] { --unifi-nav-accent: var(--unifi-blue); }
+.unifi-nav-section[data-accent="green"] { --unifi-nav-accent: var(--unifi-blue); }
+.unifi-nav-section[data-accent="red"] { --unifi-nav-accent: var(--unifi-blue); }
 .unifi-nav-section[data-menu="logout"] { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--unifi-line); }
-.unifi-nav-icon-frame { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border: 1px solid var(--unifi-line); border-radius: 9px; background: var(--unifi-surface); color: var(--unifi-text-3); box-shadow: 0 1px 1px rgba(15, 23, 42, .025); transition: border-color .16s ease, color .16s ease, background-color .16s ease, transform .16s ease; }
-.unifi-nav-root:hover .unifi-nav-icon-frame { border-color: color-mix(in srgb, var(--unifi-nav-accent) 35%, var(--unifi-line)); color: var(--unifi-nav-accent); transform: translateY(-1px); }
-.unifi-nav-section.active > .unifi-nav-head .unifi-nav-icon-frame { border-color: color-mix(in srgb, var(--unifi-nav-accent) 28%, transparent); background: color-mix(in srgb, var(--unifi-nav-accent) 13%, var(--unifi-surface)); color: var(--unifi-nav-accent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--unifi-nav-accent) 5%, transparent); }
+.unifi-nav-icon-frame { display: grid; width: 26px; height: 26px; flex: 0 0 26px; place-items: center; border: 0; border-radius: 9px; background: transparent; color: var(--unifi-text-3); box-shadow: none; transition: color .14s ease; }
+.unifi-nav-root:hover .unifi-nav-icon-frame { color: var(--unifi-blue); }
+.unifi-nav-section.active > .unifi-nav-head .unifi-nav-icon-frame { background: transparent; color: var(--unifi-blue); box-shadow: none; }
 .unifi-nav-section.active > .unifi-nav-head::before { position: absolute; left: -10px; width: 3px; height: 28px; border-radius: 0 3px 3px 0; background: var(--unifi-nav-accent); content: ""; }
 .unifi-nav-copy { display: flex; min-width: 0; flex-direction: column; line-height: 1.4; }
-.unifi-nav-copy strong { overflow: visible; color: inherit; font-size: 13.5px; font-weight: 590; text-overflow: clip; white-space: normal; line-height: 1.5; overflow-wrap: anywhere; }
-.unifi-nav-copy small { margin-top: 3px; overflow: visible; color: var(--unifi-text-3); font-size: 11px; font-weight: 470; text-overflow: clip; white-space: normal; line-height: 1.5; }
+.unifi-nav-copy strong { overflow: visible; color: inherit; font-size: 13px; font-weight: 550; text-overflow: clip; white-space: normal; line-height: 1.5; overflow-wrap: anywhere; }
+.unifi-nav-copy small { margin-top: 1px; overflow: visible; color: var(--unifi-text-3); font-size: 11px; font-weight: 400; text-overflow: clip; white-space: normal; line-height: 1.5; }
 .unifi-nav-section.active .unifi-nav-copy small { color: color-mix(in srgb, var(--unifi-nav-accent) 70%, var(--unifi-text-3)); }
 .unifi-nav-icon { width: 19px; height: 19px; }
 .unifi-expander-icon { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.unifi-child-icon-frame { display: grid; width: 25px; height: 25px; flex: 0 0 25px; place-items: center; border-radius: 6px; color: var(--unifi-text-3); }
-.unifi-nav-children li.selected .unifi-child-icon-frame { background: color-mix(in srgb, var(--unifi-nav-accent) 12%, transparent); color: var(--unifi-nav-accent); }
+.unifi-child-icon-frame { display: grid; width: 22px; height: 22px; flex: 0 0 22px; place-items: center; border-radius: 6px; color: var(--unifi-text-3); }
+.unifi-nav-children li.selected .unifi-child-icon-frame { background: transparent; color: var(--unifi-blue); }
 .unifi-device-icon { position: relative; display: grid; width: 32px; height: 32px; flex: 0 0 32px; place-items: center; border-radius: 8px; background: var(--unifi-blue-soft); color: var(--unifi-blue); }
 .unifi-device-icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .unifi-device-icon i { position: absolute; right: -1px; bottom: -1px; width: 8px; height: 8px; border: 2px solid var(--unifi-surface); border-radius: 50%; background: var(--unifi-green); }
@@ -151,62 +148,62 @@ body.unifi-blank::after { bottom: -260px; left: -130px; }
 #unifi-dashboard { margin-bottom: 22px; }
 .unifi-telemetry { color: var(--unifi-text); }
 .unifi-telemetry-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin: 0 0 14px; }
-.unifi-eyebrow { display: block; margin-bottom: 4px; color: var(--unifi-text-3); font-size: 9px; font-weight: 680; letter-spacing: .09em; text-transform: uppercase; }
+.unifi-eyebrow { display: block; margin-bottom: 4px; color: var(--unifi-text-3); font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; }
 .unifi-telemetry-heading h1 { margin: 0; color: var(--unifi-text); font-size: 22px; font-weight: 630; letter-spacing: -.03em; }
-.unifi-health-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border: 1px solid color-mix(in srgb, var(--unifi-green) 28%, var(--unifi-line)); border-radius: 999px; background: color-mix(in srgb, var(--unifi-green) 8%, var(--unifi-surface)); color: var(--unifi-green); font-size: 9px; font-weight: 680; letter-spacing: .05em; text-transform: uppercase; }
-.unifi-health-pill i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 12%, transparent); animation: unifi-live-pulse 2s ease-out infinite; }
+.unifi-health-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border: 1px solid color-mix(in srgb, var(--unifi-green) 28%, var(--unifi-line)); border-radius: 999px; background: color-mix(in srgb, var(--unifi-green) 8%, var(--unifi-surface)); color: var(--unifi-green); font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.unifi-health-pill i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .unifi-kpi-grid { display: grid; grid-template-columns: repeat(3, minmax(150px, .72fr)) minmax(340px, 1.8fr); gap: 12px; }
-.unifi-kpi-card { position: relative; display: flex; min-width: 0; min-height: 150px; align-items: flex-start; gap: 12px; padding: 22px; overflow: visible; border: 1px solid var(--unifi-line); border-radius: 10px; background: var(--unifi-surface); box-shadow: var(--unifi-shadow-sm); flex-direction: column; }
-.unifi-kpi-card::after { position: absolute; right: -24px; bottom: -38px; width: 100px; height: 100px; border-radius: 50%; background: color-mix(in srgb, var(--card-accent, var(--unifi-blue)) 5%, transparent); content: ""; display: none; }
+.unifi-kpi-card { position: relative; display: flex; min-width: 0; min-height: 120px; align-items: flex-start; gap: 10px; padding: 16px; overflow: visible; border: 1px solid var(--unifi-line); border-radius: 10px; background: var(--unifi-surface); box-shadow: var(--unifi-shadow-sm); flex-direction: column; justify-content: center; }
 .unifi-kpi-card.is-connectivity { --card-accent: var(--unifi-green); }
 .unifi-kpi-card.is-ports { --card-accent: var(--unifi-blue); }
 .unifi-kpi-card.is-system { --card-accent: var(--unifi-violet); }
 .unifi-kpi-card.has-warning { --card-accent: var(--unifi-amber); }
-.unifi-kpi-icon { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border-radius: 9px; background: color-mix(in srgb, var(--card-accent, var(--unifi-blue)) 11%, var(--unifi-surface)); color: var(--card-accent, var(--unifi-blue)); }
+.unifi-kpi-icon { display: grid; width: 28px; height: 28px; flex: 0 0 28px; place-items: center; border-radius: 9px; background: transparent; color: var(--card-accent, var(--unifi-blue)); }
+.unifi-kpi-card > .unifi-kpi-icon { position: absolute; top: 14px; right: 12px; width: 22px; height: 22px; }
 .unifi-kpi-svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .unifi-kpi-copy { display: flex; min-width: 0; flex-direction: column; }
-.unifi-kpi-copy > small:first-child { color: var(--unifi-text-3); font-size: 10px; font-weight: 640; letter-spacing: .055em; text-transform: uppercase; line-height: 1.6; }
-.unifi-kpi-value { margin-top: 10px; overflow: visible; color: var(--unifi-text); font-size: 23px; font-weight: 650; letter-spacing: -.035em; text-overflow: clip; white-space: normal; line-height: 1.4; overflow-wrap: anywhere; }
+.unifi-kpi-copy > small:first-child { color: var(--unifi-text-3); font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none; line-height: 1.6; margin-right: 22px; }
+.unifi-kpi-value { margin-top: 4px; overflow: visible; color: var(--unifi-text); font-size: 22px; font-weight: 600; letter-spacing: -.035em; text-overflow: clip; white-space: normal; line-height: 1.4; overflow-wrap: anywhere; }
 .unifi-kpi-copy > small:last-child { margin-top: 4px; color: var(--unifi-text-3); font-size: 11px; }
-.unifi-throughput-card { display: block; min-height: 150px; padding: 20px; }
+.unifi-throughput-card { display: block; min-height: 120px; padding: 16px; }
 .unifi-kpi-card-head { position: relative; z-index: 1; display: flex; align-items: center; gap: 9px; }
 .unifi-kpi-card-head > span:nth-child(2) { display: flex; min-width: 0; align-items: center; gap: 7px; }
-.unifi-kpi-card-head small { color: var(--unifi-text-3); font-size: 9px; font-weight: 650; letter-spacing: .055em; text-transform: uppercase; }
-.unifi-live-label { padding: 2px 5px; border-radius: 4px; background: color-mix(in srgb, var(--unifi-green) 12%, transparent); color: var(--unifi-green); font-size: 7px; letter-spacing: .08em; }
-.unifi-throughput-values { position: absolute; z-index: 2; top: 66px; left: 20px; display: flex; gap: 14px; }
+.unifi-kpi-card-head small { color: var(--unifi-text-3); font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.unifi-live-label { padding: 2px 5px; border-radius: 4px; background: color-mix(in srgb, var(--unifi-green) 12%, transparent); color: var(--unifi-green); font-size: 10px; font-weight: 500; letter-spacing: 0; }
+.unifi-throughput-values { position: absolute; z-index: 2; top: 52px; left: 16px; display: flex; gap: 12px; }
 .unifi-throughput-values > span { display: grid; grid-template-columns: 14px auto; align-items: center; column-gap: 5px; }
-.unifi-throughput-values small { grid-column: 2; color: var(--unifi-text-3); font-size: 9px; text-transform: uppercase; }
+.unifi-throughput-values small { grid-column: 2; color: var(--unifi-text-3); font-size: 11px; text-transform: none; }
 .unifi-throughput-values strong { grid-column: 2; color: var(--unifi-text); font-size: 12px; font-weight: 620; line-height: 1.6; }
 .unifi-rate-icon { grid-row: 1 / span 2; width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; }
 .unifi-throughput-values .is-rx { color: var(--unifi-blue); }
 .unifi-throughput-values .is-tx { color: var(--unifi-cyan); }
-.unifi-throughput-graph { position: absolute; z-index: 1; right: 16px; bottom: 20px; width: 43%; height: 68px; overflow: visible; }
-.unifi-throughput-gridline { stroke: var(--unifi-line); stroke-width: .7; stroke-dasharray: 2 3; }
+.unifi-throughput-graph { position: absolute; z-index: 1; right: 16px; bottom: 16px; width: 43%; height: 52px; overflow: visible; }
+.unifi-throughput-gridline { stroke: var(--unifi-line); stroke-width: .7; stroke-dasharray: none; }
 .unifi-throughput-line { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .unifi-throughput-line.is-rx { stroke: var(--unifi-blue); }
 .unifi-throughput-line.is-tx { stroke: var(--unifi-cyan); opacity: .8; }
-.unifi-port-panel { margin-top: 16px; padding: 0 22px 22px; border: 1px solid var(--unifi-line); border-radius: 10px; background: var(--unifi-surface); box-shadow: var(--unifi-shadow-sm); }
-.unifi-port-panel > header { position: static; z-index: auto; display: flex; width: auto; min-height: 72px; align-items: center; gap: 10px; margin: 0; padding: 18px 0; border: 0; border-bottom: 1px solid var(--unifi-line); background: transparent; box-shadow: none; color: var(--unifi-text); text-shadow: none; margin-bottom: 16px; }
-.unifi-panel-icon { display: grid; width: 30px; height: 30px; flex: 0 0 30px; place-items: center; border-radius: 8px; background: var(--unifi-blue-soft); color: var(--unifi-blue); }
+.unifi-port-panel { margin-top: 16px; padding: 0 16px 16px; border: 1px solid var(--unifi-line); border-radius: 10px; background: var(--unifi-surface); box-shadow: var(--unifi-shadow-sm); }
+.unifi-port-panel > header { position: static; z-index: auto; display: flex; width: auto; min-height: 56px; align-items: center; gap: 10px; margin: 0; padding: 12px 0; border: 0; border-bottom: 1px solid var(--unifi-line); background: transparent; box-shadow: none; color: var(--unifi-text); text-shadow: none; margin-bottom: 12px; }
+.unifi-panel-icon { display: grid; width: 30px; height: 30px; flex: 0 0 30px; place-items: center; border-radius: 8px; background: transparent; color: var(--unifi-blue); }
 .unifi-panel-svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .unifi-port-panel > header > span:nth-child(2) { display: flex; flex-direction: column; line-height: 1.6; }
 .unifi-port-panel > header strong { color: var(--unifi-text); font-size: 13px; font-weight: 620; }
 .unifi-port-panel > header small { margin-top: 4px; color: var(--unifi-text-3); font-size: 11px; }
 .unifi-panel-summary { margin-left: auto; color: var(--unifi-text-3); font-size: 11px; }
 .unifi-port-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; padding-top: 0; }
-.unifi-port-tile { position: relative; display: flex; min-width: 0; align-items: center; gap: 9px; padding: 14px 12px; border: 1px solid var(--unifi-line); border-radius: 8px; background: color-mix(in srgb, var(--unifi-bg) 38%, var(--unifi-surface)); transition: border-color .16s ease, background-color .16s ease, transform .16s ease; }
-.unifi-port-tile:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--unifi-blue) 30%, var(--unifi-line)); background: var(--unifi-surface-hover); }
+.unifi-port-tile { position: relative; display: flex; min-width: 0; align-items: center; gap: 9px; padding: 10px; border: 1px solid var(--unifi-line); border-radius: 8px; background: var(--unifi-surface); transition: border-color .16s ease, background-color .16s ease; }
+.unifi-port-tile:hover { border-color: color-mix(in srgb, var(--unifi-blue) 30%, var(--unifi-line)); background: var(--unifi-surface-hover); }
 .unifi-port-glyph { position: relative; display: grid; width: 29px; height: 29px; flex: 0 0 29px; place-items: center; border-radius: 7px; background: var(--unifi-bg); color: var(--unifi-text-3); }
 .unifi-port-svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .unifi-port-glyph i { position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border: 1px solid var(--unifi-surface); border-radius: 50%; background: var(--unifi-text-3); }
 .unifi-port-tile.is-online .unifi-port-glyph { background: color-mix(in srgb, var(--unifi-green) 10%, var(--unifi-surface)); color: var(--unifi-green); }
-.unifi-port-tile.is-online .unifi-port-glyph i { background: var(--unifi-green); box-shadow: 0 0 5px color-mix(in srgb, var(--unifi-green) 70%, transparent); }
+.unifi-port-tile.is-online .unifi-port-glyph i { background: var(--unifi-green); }
 .unifi-port-tile.is-wan.is-online .unifi-port-glyph { background: color-mix(in srgb, var(--unifi-violet) 10%, var(--unifi-surface)); color: var(--unifi-violet); }
-.unifi-port-tile.is-wan.is-online .unifi-port-glyph i { background: var(--unifi-violet); box-shadow: 0 0 5px color-mix(in srgb, var(--unifi-violet) 70%, transparent); }
+.unifi-port-tile.is-wan.is-online .unifi-port-glyph i { background: var(--unifi-violet); }
 .unifi-port-copy { display: flex; min-width: 0; flex: 1; flex-direction: column; }
 .unifi-port-copy strong { overflow: hidden; color: var(--unifi-text); font-size: 12px; font-weight: 630; text-overflow: ellipsis; white-space: nowrap; line-height: 1.6; }
 .unifi-port-copy small { margin-top: 3px; overflow: hidden; color: var(--unifi-text-3); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; line-height: 1.6; }
-.unifi-port-role { padding: 2px 4px; border-radius: 4px; background: var(--unifi-bg); color: var(--unifi-text-3); font-size: 9px; font-weight: 700; letter-spacing: .05em; line-height: 1.5; }
+.unifi-port-role { padding: 2px 4px; border-radius: 4px; background: var(--unifi-bg); color: var(--unifi-text-3); font-size: 10px; font-weight: 500; letter-spacing: 0; line-height: 1.5; }
 .unifi-port-tile.is-wan .unifi-port-role { background: color-mix(in srgb, var(--unifi-violet) 10%, transparent); color: var(--unifi-violet); }
 .unifi-empty-state { grid-column: 1 / -1; margin: 5px 0 0; padding: 18px; color: var(--unifi-text-3); font-size: 11px; text-align: center; }
 #unifi-dashboard.is-compact .unifi-telemetry-heading { margin-bottom: 10px; }
@@ -217,8 +214,6 @@ body.unifi-overview-page .includes > .unifi-port-status-section, body.unifi-over
 body.unifi-overview-page .includes > .unifi-metric-section { grid-column: span 4; }
 .unifi-port-status-section > div:last-child > div { grid-template-columns: repeat(auto-fill, minmax(min(144px, 100%), 1fr)) !important; gap: 12px; margin: 0 !important; padding-top: 18px; }
 .unifi-command-panel > label > svg { width: 19px; height: 19px; flex: 0 0 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
-@keyframes unifi-live-pulse {0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--unifi-green) 34%, transparent); }
-	70%, 100% { box-shadow: 0 0 0 7px transparent; }}
 @media (max-width: 1280px) {
 .unifi-kpi-grid, #unifi-dashboard.is-compact .unifi-kpi-grid { grid-template-columns: repeat(3, minmax(140px, 1fr)); }
 .unifi-throughput-card { grid-column: 1 / -1; }
@@ -228,14 +223,14 @@ body.unifi-overview-page .includes > .unifi-metric-section { grid-column: span 6
 .unifi-device-icon-svg { display: inline-block; width: 22px; height: 22px; flex: 0 0 22px; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; color: var(--unifi-blue); }
 .unifi-device-icon-svg.is-offline { color: var(--unifi-text-3); opacity: .6; }
 .unifi-device-icon-svg.is-poe { color: var(--unifi-amber); }
-.unifi-throughput-caption { position: absolute; left: 20px; bottom: 12px; color: var(--unifi-text-3); font-size: 9px; line-height: 1.3; }
+.unifi-throughput-caption { position: absolute; left: 16px; bottom: 10px; color: var(--unifi-text-3); font-size: 10px; line-height: 1.3; }
 @media (max-width: 1280px) and (min-width: 901px) {
 .unifi-throughput-graph { width: 62%; }
 }
 .unifi-page-submenu { margin: 3px 8px 12px 24px; padding: 4px 0 4px 12px; border-left: 1px solid var(--unifi-line); list-style: none; }
 .unifi-page-submenu > li { margin: 2px 0; padding: 0; list-style: none; }
 .unifi-page-submenu > li[hidden] { display: none !important; }
-.unifi-page-submenu button { display: flex; width: 100%; min-height: 38px; height: auto; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border: 0; border-radius: 6px; background: transparent; color: var(--unifi-text-2); font-family: inherit; font-size: 12px; font-weight: 480; line-height: 1.55; text-align: left; white-space: normal; cursor: pointer; }
+.unifi-page-submenu button { display: flex; width: 100%; min-height: 34px; height: auto; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 10px; border: 0; border-radius: 6px; background: transparent; color: var(--unifi-text-2); font-family: inherit; font-size: 12px; font-weight: 480; line-height: 1.55; text-align: left; white-space: normal; cursor: pointer; }
 .unifi-page-submenu button > span { min-width: 0; overflow-wrap: anywhere; }
 .unifi-page-submenu button:hover { background: var(--unifi-surface-hover); color: var(--unifi-text); }
 .unifi-page-submenu button.is-active { background: var(--unifi-blue-soft); color: var(--unifi-blue); font-weight: 600; }
@@ -244,19 +239,19 @@ body.unifi-overview-page .includes > .unifi-metric-section { grid-column: span 6
 @media (min-width: 901px) {
 .unifi-tab-source { display: none !important; }
 }
-.unifi-nav-children > li > a { min-height: 42px; padding-top: 8px; padding-bottom: 8px; font-size: 13px; line-height: 1.55; }
+.unifi-nav-children > li > a { min-height: 36px; padding-top: 5px; padding-bottom: 5px; font-size: 13px; line-height: 1.55; }
 .unifi-nav-children > li > a > span:last-child { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
 
 /* Native content surfaces are styled here only when a view has no section card. */
-#view > h2, .cbi-map > h2 { margin-bottom: 12px; font-size: 26px; }
-#view > .cbi-map-descr { margin-bottom: 28px; max-width: 92ch; }
-#content_syslog { padding: 24px; border: 1px solid var(--unifi-line); border-radius: 10px; background: var(--unifi-surface); }
-#content_syslog > div:not(.cbi-section-descr) { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px !important; padding-bottom: 0 !important; }
+#view > h2, .cbi-map > h2 { margin-bottom: 12px; font-size: 24px; }
+#view > .cbi-map-descr { margin-bottom: 20px; max-width: 92ch; }
+#content_syslog { padding: var(--unifi-card-padding); border: 1px solid var(--unifi-line); border-radius: 10px; background: var(--unifi-surface); }
+#content_syslog > div:not(.cbi-section-descr) { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px !important; padding-bottom: 0 !important; }
 #content_syslog label { margin: 0 !important; color: var(--unifi-text-2); font-size: 12px; }
 #content_syslog select { width: auto; min-width: 140px; }
 #content_syslog #logMaxRows { width: 110px; }
 #content_syslog #logTextFilter { flex: 1 1 180px; }
-#syslog { display: block; width: 100%; min-height: 420px; max-height: 65vh; margin: 20px 0; padding: 24px; overflow: auto; border-radius: 8px; background: var(--unifi-bg); font-family: var(--font-mono); line-height: 1.9; white-space: pre; tab-size: 4; }
+#syslog { display: block; width: 100%; min-height: 420px; max-height: 65vh; margin: 16px 0; padding: 18px; overflow: auto; border-radius: 8px; background: var(--unifi-bg); font-family: var(--font-mono); line-height: 1.65; white-space: pre; tab-size: 4; }
 .controls { margin-bottom: 24px; }
 .controls > div { margin-bottom: 12px; }
 .controls label { display: inline-block; margin-right: 12px; color: var(--unifi-text-3); font-size: 12px; }
@@ -269,14 +264,14 @@ body.unifi-overview-page .includes > .unifi-metric-section { grid-column: span 6
 .unifi-luci-port .ifacebox-body > .is-offline { color: var(--unifi-text-3); }
 .unifi-luci-port .ifacebox-body > .is-poe { color: var(--unifi-amber); }
 body.unifi-overview-page #view > h2:first-child { display: none; }
-.unifi-overview-section > .cbi-title h3 { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 18px; border-bottom: 1px solid var(--unifi-line); }
-.unifi-overview-section .table .td { padding: 12px 8px; font-size: 12px; }
+.unifi-overview-section > .cbi-title h3 { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--unifi-line); }
+.unifi-overview-section .table .td { padding: 9px 8px; font-size: 13px; }
 .unifi-overview-section .table .td:first-child { color: var(--unifi-text-3); }
 .unifi-stock-chart-frame { border: 1px solid var(--unifi-line) !important; border-radius: 8px; background: var(--unifi-surface) !important; }
 svg.unifi-stock-chart { display: block; width: 100%; border-radius: 8px; background: var(--unifi-surface); }
 .unifi-stock-chart #rx { fill: var(--unifi-blue) !important; fill-opacity: .1 !important; stroke: var(--unifi-blue) !important; }
 .unifi-stock-chart #tx { fill: var(--unifi-cyan) !important; fill-opacity: .08 !important; stroke: var(--unifi-cyan) !important; }
-.unifi-stock-chart line { stroke: var(--unifi-line-strong) !important; stroke-width: .6 !important; stroke-dasharray: 3 4; }
+.unifi-stock-chart line { stroke: var(--unifi-line-strong) !important; stroke-width: .6 !important; stroke-dasharray: none; }
 .unifi-stock-chart text { fill: var(--unifi-text-3) !important; font: 10px var(--font-sans) !important; text-shadow: none !important; }
 body.unifi-blank > #view { display: none; }
 .unifi-login-card .cbi-section { margin: 0; padding: 0; border: 0; background: transparent; }
